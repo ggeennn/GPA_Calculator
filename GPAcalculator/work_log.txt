@@ -1,0 +1,17 @@
+1.安装
+
+安装 requests 和 beautifulsoup4（用于网页抓取）：
+
+shell
+Copy code
+pip install requests beautifulsoup4			#done
+安装 pandas 和 openpyxl（用于处理Excel文件）：
+
+shell
+Copy code
+pip install pandas openpyxl				#done
+
+winget install Python.Python.3.11			#done
+
+python/PyCharm/libraries download			#done
+check concepts log
