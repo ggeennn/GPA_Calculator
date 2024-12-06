@@ -1,0 +1,21 @@
+最简单的代码编辑器：bolt.new
+https://bolt.new/
+最未来可期的AI项目： Claude Computer Use
+https://docs.anthropic.com/en/docs/bu...
+最好用的浏览器总结插件：Elmo Chat
+https://chromewebstore.google.com/det...
+最轻量的多智能体开发框架：Swarm
+https://github.com/openai/swarm
+最保“真”的TTS工具：FishAudio
+https://fish.audio/zh-CN/
+最自然的播客生成工具：NotebookLM
+https://notebooklm.google/
+最高效的图像生成工具：ComfyUI
+https://www.comfy.org/
+最想要的机器人Pi0：可帮你做家务的机器人
+https://www.physicalintelligence.comp...
+获得最高奖的AI：AlphaFold
+https://github.com/google-deepmind/al...
+https://deepmind.google/technologies/...
+最酷炫的AI算法实现方式：ai-by-hand-excel
+https://aibyhand.substack.com/
