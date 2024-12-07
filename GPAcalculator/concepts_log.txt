@@ -27,4 +27,11 @@
   sheet['A1'] = 'Hello, world!'
   wb.save('example.xlsx')
 
-panda???
+# pandas
+- 功能：强大的数据分析库，处理表格数据、CSV、Excel 文件等，提供数据清理、分析和可视化功能。
+- 安装命令：pip install pandas
+- 示例代码：
+  import pandas as pd
+  data = pd.read_csv('example.csv')
+  print(data.head())
+

@@ -1,18 +1,12 @@
-1.安装
-
-安装 requests 和 beautifulsoup4（用于网页抓取）：
-
-shell
-Copy code
+2024/12/6
 pip install requests beautifulsoup4			#done
-安装 pandas 和 openpyxl（用于处理Excel文件）：
-
-shell
-Copy code
 pip install pandas openpyxl				#done
-
 winget install Python.Python.3.11			#done
-
 python/PyCharm/libraries download			#done
 check concepts log
-check bolt.new
+check bolt.new		#consume token in GitHub	#done
+
+开始网页抓取
+	确认是否为java动态加载数据
+		F12进入网站开发者工具/刷新后选择Fetch\XHR/查找成绩相关xhr（右键点击看Response）！！！！
+		chrome设置禁用JS后无法加载页面信息，判定为动态加载

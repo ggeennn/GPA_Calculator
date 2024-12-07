@@ -2,7 +2,7 @@
 https://bolt.new/
 最未来可期的AI项目： Claude Computer Use
 https://docs.anthropic.com/en/docs/bu...
-最好用的浏览器总结插件：Elmo Chat
+最好用的浏览器总结插件：
 https://chromewebstore.google.com/det...
 最轻量的多智能体开发框架：Swarm
 https://github.com/openai/swarm
