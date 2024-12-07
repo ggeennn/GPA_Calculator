@@ -15,3 +15,4 @@ winget install Python.Python.3.11			#done
 
 python/PyCharm/libraries download			#done
 check concepts log
+check bolt.new
