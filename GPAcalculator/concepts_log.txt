@@ -87,3 +87,9 @@
   "address": { "city": "Toronto", "postalCode": "M1B1A1" }
 }
 
+#python脚本优化
+driver_path = r"C:\Users\Lenovo\.wdm\..."
+chrome_service = Service(driver_path)
+driver = webdriver.Chrome(service=chrome_service)
+↓↓↓等效↓↓↓
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
