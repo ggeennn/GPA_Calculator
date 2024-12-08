@@ -93,3 +93,18 @@ chrome_service = Service(driver_path)
 driver = webdriver.Chrome(service=chrome_service)
 ↓↓↓等效↓↓↓
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+#python注释要求
+多行注释与反斜杠：
+   - 多行注释使用三引号 ''' 或 """ 包围，实际上是多行字符串。
+   - 在这种情况下，反斜杠 \ 的处理方式与普通字符串相同。如果反斜杠后跟着一个无效的 Unicode 转义序列，就会引发 Unicode 错误。
+错误的示例：如果反斜杠后跟着未正确转义的字符，例如 \U，则会引发错误
+   '''
+   这是一个多行注释
+   包含了一个无效的 Unicode 转义序列 \U0001F600
+   '''
+避免错误的方法：使用原始字符串：通过在多行注释前加 r，让 Python 不处理反斜杠的转义 or 使用双反斜杠 \\ 来避免转义错误
+   r'''
+   这是一个原始多行字符串注释
+   包含了一个无效的 Unicode 转义序列 \U0001F600
+   '''
