@@ -5,6 +5,7 @@ winget install Python.Python.3.11			#done
 python/PyCharm/libraries download			#done
 check concepts log
 check bolt.new		#consume token in GitHub	#done
+
 2024/12/7
 开始网页抓取
 	确认是否为java动态加载数据	#判定为动态加载
@@ -21,4 +22,8 @@ check bolt.new		#consume token in GitHub	#done
 	如果 API 不可行，使用 Selenium：
 使用 Selenium 来模拟浏览器操作，自动登录并提取页面上加载的成绩数据。
 Selenium 可以处理动态加载的页面，获取页面渲染后的数据。
-		
+--------------------------------------------------------
+2024/12/8
+测试抓取		#成功通过selenium启动chromeDriver
+
+

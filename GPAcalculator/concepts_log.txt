@@ -35,10 +35,55 @@
   import pandas as pd
   data = pd.read_csv('example.csv')
   print(data.head())
+
 2024/12/7----------------------------------
 # Selenium 
-是一种工具，用来模拟浏览器操作，就像你手动操作浏览器一样。
-可以通过它自动化地加载网页，模拟点击、输入，以及抓取动态加载的内容。
-测试目的
-验证网站是否能够通过模拟浏览器加载页面抓取数据。
-检查成绩信息是否在页面完全加载后可见或可以通过某种 API 获取。
+|是一种工具，用来模拟浏览器操作，就像你手动操作浏览器一样。
+|可以通过它自动化地加载网页，模拟点击、输入，以及抓取动态加载的内容。
+|测试目的
+|验证网站是否能够通过模拟浏览器加载页面抓取数据。
+|检查成绩信息是否在页面完全加载后可见或可以通过某种 API 获取
+|# WebSocket in Selenium
+|- WebSocket enables real-time two-way communication between Selenium WebDriver and Chrome.
+|- When `webdriver.Chrome()` is called, WebSocket is established for browser control.
+|- `DevTools listening on ws://...` indicates the connection is active.
+|# ChromeDriver and Selenium
+|- Selenium uses ChromeDriver to control Chrome.
+|- `webdriver.Chrome()` launches both ChromeDriver and the browser.
+|# Opening Pages
+|- Use `driver.get("url")` to load a page via WebSocket.
+
+
+# Seneca成绩API
+1. **身份验证**  
+   - 需要正确配置认证信息（如Cookie、Authorization）。
+2. **请求头配置**  
+   - 请求头需与浏览器一致，包括`User-Agent`等。
+3. **403权限问题**  
+   - 可能因权限或API访问控制导致403错误。
+4. **动态内容加载**  
+   - 使用AJAX动态加载数据，需模拟浏览器行为。
+5. **Session管理**  
+   - 必须保持有效Session ID和Cookie。
+6. **反爬虫机制**  
+   - 网站可能有反爬虫措施，需要避开或使用Selenium模拟浏览器。
+
+2024/12/8-------------------------
+# JSON格式
+# JSON Format Overview
+- JSON (JavaScript Object Notation): Lightweight data-interchange format.
+- Structure: Key-value pairs and arrays.
+- Syntax:
+  * Objects: Enclosed in `{}` with key-value pairs.
+  * Arrays: Enclosed in `[]` with values separated by commas.
+  * Keys: Strings, enclosed in double quotes.
+  * Values: Strings, numbers, objects, arrays, `true`, `false`, or `null`.
+# Example
+{
+  "name": "John",
+  "age": 30,
+  "isStudent": false,
+  "skills": ["Python", "C"],
+  "address": { "city": "Toronto", "postalCode": "M1B1A1" }
+}
+
