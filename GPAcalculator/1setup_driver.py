@@ -2,18 +2,12 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 import time
-# 明确指定 ChromeDriver 的路径
-driver_path = r"C:\Users\Lenovo\.wdm\drivers\chromedriver\win64\131.0.6778.87\chromedriver-win32\chromedriver.exe"
 
-# 设置 ChromeDriver 服务
-chrome_service = Service(driver_path)
-
-# 设置浏览器选项（可选）
 options = Options()
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-# 启动 WebDriver
-driver = webdriver.Chrome(service=Service(driver_path), options=options)
 
 # 打开 Google 测试
 driver.get("https://www.google.com")
