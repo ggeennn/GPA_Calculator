@@ -6,15 +6,34 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 options = Options()
+# Service 对象代表 ChromeDriver 进程
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 
 # 打开 Google 测试
-driver.get("https://www.google.com")
+driver.get("https://learn.senecapolytechnic.ca/")
 print("Browser launched successfully!")
+time.sleep(1)
 
-# 延迟 10 秒，以便查看打开的网页 
-time.sleep(7)
+# 定位并点击“OK”按钮
+try:
+    button = driver.find_element(By.ID, "agree_button")  # 用 ID 定位按钮
+    button.click()  # 点击按钮
+    print("Clicked the 'OK' button successfully!")
+except Exception as e:
+    print(f"Failed to click the button: {e}")
+time.sleep(1)
+
+# 点击登录页面中的 Login 按钮
+try:
+    login_button = driver.find_element(By.ID, "bottom_Submit")  # 替换为实际登录按钮的 ID 或其他属性
+    login_button.click()
+    print("Clicked the 'Login' button successfully!")
+except Exception as e:
+    print(f"Failed to click 'Login' button: {e}")
+time.sleep(1)
+
+
 # 关闭浏览器
 driver.quit()
 
