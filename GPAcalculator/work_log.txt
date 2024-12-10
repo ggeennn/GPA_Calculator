@@ -14,7 +14,7 @@ check bolt.new		#consume token in GitHub	#done
 	成绩API	      			#API请求失败 （身份验证 或 跨域问题？）！！！！
 	测试抓取
 		pip install selenium			#done
-		download WebDriver
+		download WebDriver			#done
 ------------------下一步操作建议------------------------
 	确认 API 是否可行：
 如果 API 请求返回的数据包含你需要的信息（如成绩数据），可以进一步分析如何处理身份验证（如使用 Cookies、Headers 或 OAuth）。
@@ -25,5 +25,10 @@ Selenium 可以处理动态加载的页面，获取页面渲染后的数据。
 --------------------------------------------------------
 2024/12/8
 测试抓取		#成功通过selenium启动chromeDriver
+2024/12/10
+测试抓取
+	seneca网站元素分析
+		id="agree_button"(terms of use)/"bottom_Submit"(login)
+		
 
 
