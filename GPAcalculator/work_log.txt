@@ -33,6 +33,7 @@ seneca网站元素抓取
 2024/12/11
 seneca网站元素抓取
 	id="i0116"(email input box)/"idSIButton9"(Next button)/"i10118"(password input)/"idSIButton9"(SignIn button) #注意重复元素id导致error！check concepts_log.txt
-	
+
+selenuim中密码隐私保护，自动填充失效？？？？？
 
 
