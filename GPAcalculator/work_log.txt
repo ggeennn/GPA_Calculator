@@ -25,11 +25,14 @@ Selenium 可以处理动态加载的页面，获取页面渲染后的数据。
 --------------------------------------------------------
 2024/12/8
 测试抓取		#成功通过selenium启动chromeDriver
+
 2024/12/10
-测试抓取
-	seneca网站元素分析
-		id="agree_button"(terms of use)/"bottom_Submit"(login)
+seneca网站元素抓取
+	id="agree_button"(terms of use)/"bottom_Submit"(login)/"i0116"
+
 2024/12/11
-		
+seneca网站元素抓取
+	id="i0116"(email input box)/"idSIButton9"(Next button)/"i10118"(password input)/"idSIButton9"(SignIn button) #注意重复元素id导致error！check concepts_log.txt
+	
 
 

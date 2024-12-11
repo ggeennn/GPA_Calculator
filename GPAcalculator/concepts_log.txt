@@ -1,4 +1,4 @@
-2024/12/6----------------
+2024/12/6----------------------------
 # requests
 - 功能：简化 HTTP 请求，发送各种请求，获取网页或 API 数据。
 - 安装命令：pip install requests
@@ -68,7 +68,7 @@
 6. **反爬虫机制**  
    - 网站可能有反爬虫措施，需要避开或使用Selenium模拟浏览器。
 
-2024/12/8-------------------------
+2024/12/8-------------.py多行注释错误转义-----------------
 # JSON格式
 # JSON Format Overview
 - JSON (JavaScript Object Notation): Lightweight data-interchange format.
@@ -109,7 +109,7 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
    包含了一个无效的 Unicode 转义序列 \U0001F600
    '''
 
-2024/12/10-----------------------------------
+2024/12/10---------------------------------------
 # CSS（Cascading Style Sheets）简介
 
 - **定义**：CSS用于控制HTML文档的布局、颜色、字体和其他样式，帮助实现网页的美观和结构化。
@@ -141,7 +141,7 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
   - **过渡**：`transition` 用于在状态变化时平滑过渡。例如，`transition: all 0.3s ease;` 使元素的所有属性在0.3秒内过渡。
   - **动画**：`@keyframes` 用于创建复杂的动画效果。
 
-2024/12/11-----------------------------------
+2024/12/11-----------------重复元素id导致error------------------
 # Selenium Wait Types: 
 time.sleep(), driver.implicitly_wait(), WebDriverWait
 ## 1. time.sleep() pauses execution for a fixed time, inefficient as it always waits the full duration. Example:
