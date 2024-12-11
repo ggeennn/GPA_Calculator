@@ -55,7 +55,27 @@ try:
 except Exception as e:
     print(f"Failed to : {e}")
 
+try:
+    # 等待并定位复选框
+    checkbox = WebDriverWait(driver, 25).until(EC.element_to_be_clickable((By.ID, "KmsiCheckboxField")))
+    if not checkbox.is_selected():  # 如果复选框未被选中
+        checkbox.click()
+        print("Checkbox selected successfully!")
+    else:
+        print("Checkbox was already selected!")
 
-time.sleep(20)
+    # 等待并点击 "Yes" 按钮
+    yes_button = wait.until(EC.element_to_be_clickable((By.ID, "idSIButton9")))
+    yes_button.click()
+    print("Clicked 'Yes' button successfully!")
+except Exception as e:
+    print(f"Error during checkbox selection or 'Yes' button click: {e}")
+
+'''报错了
+courses_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[href='https://learn.senecapolytechnic.ca/ultra/course']")))
+courses_button.click()
+'''
+time.sleep(3)
+
 # 关闭浏览器
 driver.quit()
