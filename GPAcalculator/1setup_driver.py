@@ -71,10 +71,23 @@ try:
 except Exception as e:
     print(f"Error during checkbox selection or 'Yes' button click: {e}")
 
-'''报错了
-courses_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[href='https://learn.senecapolytechnic.ca/ultra/course']")))
-courses_button.click()
-'''
+try: 
+    courses_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//bb-base-navigation-button[4]//a")))
+    courses_button.click()
+    print("'Courses' click successfully!")
+except Exception as e:
+    print(f"Failed to : {e}")
+
+try: 
+    IPC_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="course-link-_733205_1"]')))
+# 滚动到页面底部 not working，参考 work_log
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    IPC_button.click()
+    print("'IPC' select successfully!")
+except Exception as e:
+    print(f"Failed to : {e}")
+
+
 time.sleep(3)
 
 # 关闭浏览器
