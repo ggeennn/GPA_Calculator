@@ -110,4 +110,68 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
    '''
 
 2024/12/10-----------------------------------
-# CSS（Cascading Style Sheets）
+# CSS（Cascading Style Sheets）简介
+
+- **定义**：CSS用于控制HTML文档的布局、颜色、字体和其他样式，帮助实现网页的美观和结构化。
+- **层叠性（Cascading）**：多个样式规则可应用于同一元素，浏览器按优先级和顺序决定最终样式。
+- **选择器**：用于选择要应用样式的HTML元素。常见选择器包括：
+  - **元素选择器**：直接选择HTML标签（如`div`、`p`）。例如，`div { color: red; }` 会使页面中所有`div`标签的文字颜色变为红色。
+  - **类选择器**：选择具有特定类的元素（如`.class-name`）。例如，`.header { font-size: 20px; }` 会使所有`class="header"`的元素字体大小为20px。
+  - **ID选择器**：选择具有特定ID的元素（如`#id-name`）。例如，`#main { margin: 10px; }` 会为`id="main"`的元素设置外边距为10px。
+  - **组合选择器**：结合多个选择器，精确定位元素（如`div.class-name`）。例如，`div.class-name { background-color: blue; }` 会使所有`div`标签且具有`class="class-name"`的元素背景变为蓝色。
+
+- **盒模型**：CSS布局的基本概念，描述了元素的外边距（margin）、边框（border）、内边距（padding）和内容（content）。
+  - **例子**：`div { margin: 10px; padding: 15px; border: 1px solid black; }` 定义了一个`div`元素的外边距、内边距和边框。
+  
+- **响应式设计**：CSS媒体查询帮助网页适应不同设备和屏幕尺寸。
+  - **例子**：`@media (max-width: 600px) { body { font-size: 12px; } }` 会在屏幕宽度小于600px时调整字体大小为12px。
+
+- **常见HTML元素和属性**：
+  - **文本元素**：`<h1>`, `<p>`, `<span>`, `<strong>`, `<em>` 等，分别用于标题、段落、内联文本加粗或斜体。
+  - **布局元素**：`<div>`, `<section>`, `<header>`, `<footer>`, `<article>` 等，帮助组织和布局页面内容。
+  - **表单元素**：`<input>`, `<button>`, `<select>`, `<textarea>` 等，创建可交互的表单控件。
+  - **链接元素**：`<a>`，用于创建超链接。
+  - **图片元素**：`<img>`，用于嵌入图像。
+  
+- **定位和浮动**：
+  - **定位**：`position` 属性帮助元素定位，如 `position: absolute;` 或 `position: relative;`。
+  - **浮动**：`float` 属性用于让元素浮动，例如 `float: left;` 将元素向左浮动。
+
+- **过渡和动画**：
+  - **过渡**：`transition` 用于在状态变化时平滑过渡。例如，`transition: all 0.3s ease;` 使元素的所有属性在0.3秒内过渡。
+  - **动画**：`@keyframes` 用于创建复杂的动画效果。
+
+2024/12/11-----------------------------------
+# Selenium Wait Types: 
+time.sleep(), driver.implicitly_wait(), WebDriverWait
+## 1. time.sleep() pauses execution for a fixed time, inefficient as it always waits the full duration. Example:
+import time
+time.sleep(5)
+## 2. driver.implicitly_wait() sets a global wait time for element searches, stops early if the element is found. Example:
+driver.implicitly_wait(10)
+element = driver.find_element(By.ID, "some_id")
+## 3. WebDriverWait (Explicit Wait) waits for a specific condition, customizable and efficient for dynamic elements. Example:
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+wait = WebDriverWait(driver, 10)
+element = wait.until(EC.presence_of_element_located((By.ID, "some_id")))
+## Comparison:
+- **time.sleep()**: Fixed wait, entire script, low efficiency.
+- **implicitly_wait()**: Global implicit wait, all searches, medium efficiency.
+- **WebDriverWait**: Conditional explicit wait, specific actions, high efficiency.
+
+# Selenium元素查找中的错误和解决方法
+- **重复ID**  
+  HTML标准要求ID应该是唯一的，但如果多个元素共享相同的ID，Selenium会选择第一个遇到的元素，这可能导致测试失败或选择错误的元素。  
+  **解决方法**：确保ID唯一或使用XPath或CSS选择器进行更精确的定位。
+- **动态变化的属性**  
+  元素的属性可能在页面加载后被动态改变，Selenium会无法找到或操作这些元素，通常会抛出`NoSuchElementException`或`StaleElementReferenceException`。  
+  **解决方法**：使用显式等待（WebDriverWait）等待元素可用，或使用更稳定的选择器如XPath或CSS选择器。
+- **使用XPath和CSS选择器组合多个属性**  
+  可以同时使用多个属性（如ID和type）来精确定位元素，避免因为属性不唯一或动态变化导致的问题。  
+  示例XPath：  
+  `driver.find_element(By.XPATH, "//button[@id='0008' and @type='submit']")`  
+  示例CSS选择器：  
+  `driver.find_element(By.CSS_SELECTOR, "button#0008[type='submit']")`  
+
+

@@ -29,6 +29,7 @@ Selenium 可以处理动态加载的页面，获取页面渲染后的数据。
 测试抓取
 	seneca网站元素分析
 		id="agree_button"(terms of use)/"bottom_Submit"(login)
+2024/12/11
 		
 
 
