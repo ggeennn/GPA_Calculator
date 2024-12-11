@@ -8,7 +8,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 options = Options()
-
+'''无法自动填充！！！
+options.add_argument("--disable-blink-features=AutomationControlled")  # 防止Chrome的自动化标志
+options.add_argument("--disable-save-password-bubble")  # 禁用保存密码的提示
+options.add_argument("--autofill")  # 启用自动填充功能
+'''
 # Service 对象代表 ChromeDriver 进程
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 # driver.implicitly_wait(15)  #隐式等待元素加载（不建议和显式混用）
@@ -33,7 +37,6 @@ try:
 except Exception as e:
     print(f"Failed to click 'Login' button: {e}")
 
-
 try:
     email_input = wait.until(EC.element_to_be_clickable((By.ID, "i0116"))) 
     email_input.send_keys("ywang841@myseneca.ca")
@@ -53,6 +56,6 @@ except Exception as e:
     print(f"Failed to : {e}")
 
 
-time.sleep(3)
+time.sleep(20)
 # 关闭浏览器
 driver.quit()
