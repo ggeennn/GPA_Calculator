@@ -13,6 +13,9 @@ options.add_argument("--disable-blink-features=AutomationControlled")  # 防止C
 options.add_argument("--disable-save-password-bubble")  # 禁用保存密码的提示
 options.add_argument("--autofill")  # 启用自动填充功能
 '''
+options.add_argument("--disable-blink-features=AutomationControlled")  # 禁用 Chrome 自动化标志
+options.add_argument("--start-maximized")  # 启动时最大化浏览器
+
 # Service 对象代表 ChromeDriver 进程
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 # driver.implicitly_wait(15)  #隐式等待元素加载（不建议和显式混用）
@@ -78,10 +81,32 @@ try:
 except Exception as e:
     print(f"Failed to : {e}")
 
+try:
+    main_container = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="main-content-inner"]')))
+    # 确认容器是否有足够内容需要滚动
+    print("Right Container height:", main_container.size)
+    print("Right Container scrollHeight:", main_container.get_attribute("scrollHeight"))
+    '''V1
+    wait.until(lambda driver: driver.execute_script("return arguments[0].scrollHeight", main_container) > 0)
+    driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", main_container)
+    print("Scrolled main container successfully!")
+    time.sleep(1) 
+    '''
+    # v2
+    # 确认容器是否有足够内容需要滚动 
+    if int(main_container.get_attribute("scrollHeight")) > main_container.size["height"]: 
+        main_container = driver.find_element(By.XPATH, '//*[@id="main-content-inner"]') 
+        driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", main_container) 
+        print("Scrolled main container successfully!") 
+        time.sleep(2) # 增加等待时间，确保内容加载 
+    else: 
+        print("Container does not have enough content to scroll.")
+except Exception as e:
+    print(f"Failed to scroll main container: {e}")
+
 try: 
     IPC_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="course-link-_733205_1"]')))
-# 滚动到页面底部 not working，参考 work_log
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    driver.execute_script("arguments[0].scrollIntoView();", IPC_button) 
     IPC_button.click()
     print("'IPC' select successfully!")
 except Exception as e:
@@ -90,5 +115,5 @@ except Exception as e:
 
 time.sleep(3)
 
-# 关闭浏览器
+ #关闭浏览器
 driver.quit()
