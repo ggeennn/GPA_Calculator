@@ -33,7 +33,7 @@ seneca网站元素抓取
 2024/12/11
 seneca网站元素抓取
 	selenuim中密码隐私保护，自动填充失效？？？？？
-	/html/body/div[1]/div[2]/bb-base-layout/div/main/div/div/div[2]/div[1]/div/div/div[5]/div
-	//*[@id="main-content-inner"]
+	
 2024/12/12
-Action chain？？？check note https://chatgpt.com/c/6750b22e-f000-8005-9c4f-d08de6684048
+Action chain？？？
+//*[@id="main-content-inner"]    scroll目标/目标内容懒加载
