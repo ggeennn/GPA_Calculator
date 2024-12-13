@@ -39,4 +39,5 @@ Action chain？？？
 //*[@id="main-content-inner"]    scroll目标/目标内容懒加载（点击目标分页链接后，需要time.sleep等待加载新inner再赋值）
 
 2024/12/13
-TensorFlow ？
+TensorFlow ？？？
+stale element error解决方法：重复给元素赋值！！！！
