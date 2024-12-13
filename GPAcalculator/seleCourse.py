@@ -85,47 +85,15 @@ except Exception as e:
 
 
 try:
+    time.sleep(1)  # 等待内容加载
     main_container = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="main-content-inner"]')))
     print("main_container located successfully.")
-
-    # 检查容器是否有可滚动内容
-    scroll_height = driver.execute_script("return arguments[0].scrollHeight;", main_container)
-    client_height = driver.execute_script("return arguments[0].clientHeight;", main_container)
-    print(f"scrollHeight: {scroll_height}, clientHeight: {client_height}")
-
     # 滚动页面，确保懒加载的内容加载完成
     driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", main_container)
-    time.sleep(3)  # 等待内容加载
-    print("scrollHeight after scrolling:", driver.execute_script("return arguments[0].scrollHeight;", main_container))
-
-except Exception as e:
-    print(f"Error during scrolling or element interaction: {e}")
-    # 若发生 StaleElementReferenceException 错误，重新定位元素并尝试滚动
-    if isinstance(e, selenium.common.exceptions.StaleElementReferenceException):
-        main_container = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="main-content-inner"]')))
-        driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", main_container)
-        print("Scrolled main container after re-locating it.")
-
-
-'''
-try:
+except StaleElementReferenceException:
+    print("Stale element detected, retrying...")
     main_container = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="main-content-inner"]')))
-    # 确认容器是否有足够内容需要滚动
-    print("Right Container height:", main_container.size)
-    print("Right Container scrollHeight:", main_container.get_attribute("scrollHeight"))
-    # 使用 ActionChains 模拟滚动
-    actions = ActionChains(driver)
-    actions.move_to_element(main_container).click_and_hold().move_by_offset(0, 300).release().perform()  # 向下滑动 300 像素
-    print("Scrolled main container using Action Chains!")
-    time.sleep(2)  # 等待内容加载
-    # 验证新内容是否加载
-    updated_scroll_height = int(main_container.get_attribute("scrollHeight"))
-    print(f"Updated scrollHeight: {updated_scroll_height}")
-
-except Exception as e:
-    print(f"Failed to scroll main container using Action Chains: {e}")
-'''
-
+    driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", main_container)
 
 try: 
     IPC_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="course-link-_733205_1"]')))
