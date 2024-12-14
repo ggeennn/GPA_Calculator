@@ -105,8 +105,9 @@ except Exception as e:
 
 try: 
     #无法找到该元素？？
-    IPC_all = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="card__733205_1"]/div/div/div[2]/div[2]/div/a')))
-    # driver.execute_script("arguments[0].scrollIntoView();", IPC_all) 
+    IPC_all = wait.until(EC.element_to_be_clickable((By.XPATH, '(//*[@id="card__733205_1"]/div/div/div[2]/div[2]/div/a)[2]')))
+    driver.execute_script("arguments[0].scrollIntoView({block: 'start'});", IPC_all)
+    time.sleep(1)  # 等待滑动
     IPC_all.click()
     print("'IPC' select successfully!")
 except Exception as e:
