@@ -174,8 +174,73 @@ element = wait.until(EC.presence_of_element_located((By.ID, "some_id")))
   示例CSS选择器：  
   `driver.find_element(By.CSS_SELECTOR, "button#0008[type='submit']")`  
 
-2024/12/13-----------------1.分页面内容懒加载，点击分页后页面元素stale------
+2024/12/13---------------1.元素stale循环赋值 2.devTool点击对象高亮-----------
 1. 需要sleep等待新分页元素加载再赋值
-analytics-id？？？
+2. analytics-id？？？
+3.# Pseudo-elements in CSS
+## Definition
+- Pseudo-elements are special CSS selectors.
+- They allow adding styles or effects to existing elements without modifying HTML structure.
+	## Common Pseudo-elements
+### ::before
+- Inserts content before the selected element.
+- Example:
+```css
+p::before {
+    content: "⭐"; /* Star symbol */
+    color: gold;
+}
+```
+### ::after
+- Inserts content after the selected element.
+- Example:
+```css
+p::after {
+    content: "✓"; /* Check mark */
+    color: green;
+}
+```
+### ::first-line
+- Targets the first line of text within an element.
+- Example:
+```css
+p::first-line {
+    font-weight: bold;
+    color: blue;
+}
+```
+### ::first-letter
+- Targets the first letter of an element's text.
+- Example:
+```css
+p::first-letter {
+    font-size: 2em;
+    color: red;
+}
+```
+	## Example Usage
+### HTML:
+```html
+<p>Hello, world!</p>
+```
+### CSS:
+```css
+p::before {
+    content: "⭐"; /* Star symbol */
+    color: gold;
+}
+
+p::after {
+    content: "✓"; /* Check mark */
+    color: green;
+}
+```
+### Result:
+```html
+⭐Hello, world!✓
+```
+	## Summary
+- Pseudo-elements enhance visual effects without altering HTML.
+- Useful in web design for improving user experience and styling flexibility.
 
 
