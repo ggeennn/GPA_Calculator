@@ -103,6 +103,7 @@ try:
 except Exception as e:
     print(f"Failed to : {e}")
 
+'''COURSE 1/5 IPC'''
 try: 
     #无法找到该元素？？
     IPC_all = wait.until(EC.element_to_be_clickable((By.XPATH, '(//*[@id="card__733205_1"]/div/div/div[2]/div[2]/div/a)[2]')))
@@ -113,7 +114,46 @@ try:
 except Exception as e:
     print(f"Failed to : {e}")
 
-time.sleep(3)
+time.sleep(1)
 
+# 等待并获取所有 items 和 grades
+items_xpath = "//div[@class='name ellipsis student-grades__exception']//a"
+grades_xpath = '//div[@ng-repeat="grade in courseGradesStudent.userGrades"]//span[contains(@class, "grade-input-display") and contains(@class, "grade-ellipsis")]'
+
+items = wait.until(EC.presence_of_all_elements_located((By.XPATH, items_xpath)))
+grades = wait.until(EC.presence_of_all_elements_located((By.XPATH, grades_xpath)))
+'''
+# 遍历元素并提取文本
+item_names = [item.text for item in items]
+grade_values = [grade.text for grade in grades]
+# 打印结果
+for name, grade in zip(item_names, grade_values):
+    print(f"Item: {name}, Grade: {grade}")
+'''
+# 提取文本
+item_names = [item.text.strip() for item in items]
+grade_values = [grade.text.strip() for grade in grades]
+
+# 打印结果并编号
+print("Grades Report:\n")
+for idx, (name, grade) in enumerate(zip(item_names, grade_values), start=1):
+    print(f"{idx}. Item: {name}, Grade: {grade}")
+
+close_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="main-content"]/div[3]/div/div[3]/button')))
+close_button.click()
+
+'''COURSE 2/5 OPS'''
+try: 
+    #无法找到该元素？？
+    OPS_all = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="card__731947_1"]/div/div/div[2]/div[2]/div/a/span[1]')))
+    driver.execute_script("arguments[0].scrollIntoView({block: 'start'});", OPS_all)
+    time.sleep(1)  # 等待滑动
+    OPS_all.click()
+    print("'OPS' select successfully!")
+except Exception as e:
+    print(f"Failed to : {e}")
+
+
+time.sleep(3)   
  #关闭浏览器
 driver.quit()
