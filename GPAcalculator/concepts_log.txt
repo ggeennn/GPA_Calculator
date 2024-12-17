@@ -243,4 +243,22 @@ p::after {
 - Pseudo-elements enhance visual effects without altering HTML.
 - Useful in web design for improving user experience and styling flexibility.
 
+2024/12/16-------------------------
+我都已经加了显式等待了怎么有时还会stale或者等待时间不充分的问题
+你说得对，你的代码确实已经包含了显式等待的逻辑。不过，即使有显式等待，有时还是会遇到 StaleElementReferenceException 或等待时间不充分的问题。这通常是由于动态网页的特性造成的。以下是一些可能的原因和解决方法：
+
+可能原因
+元素在等待期间被重新加载或更新：网页在等待期间可能重新加载某些元素，导致元素引用失效。
+
+复杂的DOM操作：页面可能在加载过程中进行了多次复杂的DOM操作，导致元素状态不稳定。
+
+JavaScript 动态内容：一些内容由JavaScript动态更新，可能在你操作之前被改变。
+
+解决方法
+重试机制： 实现一个重试机制，在 StaleElementReferenceException 发生时多次尝试执行操作。
+
+增加等待时间： 在一些关键步骤前后增加等待时间，确保页面完全加载。
+
+重新定位元素： 在操作前重新定位元素，确保获取到最新的元素引用。
+
 
