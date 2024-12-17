@@ -1,3 +1,15 @@
+'''     DO BEFORE RUNNING THE CODE
+In the terminal, input the following commands, replacing 
+"your_email" and "your_password" with your actual email and password:
+
+Linux/macOS:
+export SENECA_EMAIL="your_email"
+export SENECA_PASSWORD="your_password"
+
+Windows:
+set SENECA_EMAIL=your_email
+set SENECA_PASSWORD=your_password
+'''
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -7,7 +19,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import StaleElementReferenceException
 from webdriver_manager.chrome import ChromeDriverManager
 import time
-
+import os
 
 # Function to click a button by ID with error handling
 def click_button_by_id(driver, element_id, wait, button_name="button"):
@@ -28,6 +40,21 @@ def click_element_by_xpath(driver, xpath, wait, element_name="element"):
     except Exception as e:
         print(f"Failed to click {element_name} with XPath {xpath}: {e}")
 
+def login_to_seneca(driver, wait, email, password):
+    try:
+        email_input = wait.until(EC.element_to_be_clickable((By.ID, "i0116")))
+        email_input.send_keys(email)
+        click_button_by_id(driver, "idSIButton9", wait, "next")
+
+        password_input = wait.until(EC.element_to_be_clickable((By.ID, "i0118")))
+        password_input.send_keys(password)
+        click_button_by_id(driver, "idSIButton9", wait, "signin")
+
+        click_button_by_id(driver, "KmsiCheckboxField", wait, "checkbox")
+        click_button_by_id(driver, "idSIButton9", wait, "Yes")
+        print("Login successful!")
+    except Exception as e:
+        print(f"Login failed: {e}")
 
 # Function to extract and print grades for a course
 def get_course_grades(driver, course_name, course_xpaths, wait):
@@ -94,28 +121,11 @@ def main():
     # Click login button
     click_button_by_id(driver, "bottom_Submit", wait, "Login")
 
+
     # Login process
-    try:
-        email_input = wait.until(EC.element_to_be_clickable((By.ID, "i0116")))
-        email_input.send_keys("ywang841@myseneca.ca")
-         # Click "next" button
-        click_button_by_id(driver, "idSIButton9", wait, "next")
-        print("Email input successfully!")
-
-        password_input = wait.until(EC.element_to_be_clickable((By.ID, "i0118")))
-        password_input.send_keys("Wyc406/304")
-         # Click "signin" button
-        click_button_by_id(driver, "idSIButton9", wait, "signin")
-        print("Password input successfully!")
-    except Exception as e:
-        print(f"Login failed: {e}")
-
-    # Handle checkbox selection and "Yes" button
-    try:
-        click_button_by_id(driver, "KmsiCheckboxField", wait, "checkbox")
-        click_button_by_id(driver, "idSIButton9", wait, "Yes")
-    except Exception as e:
-        print(f"Error during checkbox selection or 'Yes' button click: {e}")
+    email = os.getenv("SENECA_EMAIL")
+    password = os.getenv("SENECA_PASSWORD")
+    login_to_seneca(driver, wait, email, password)
     
     # Wait for grades button and click
     time.sleep(3)
