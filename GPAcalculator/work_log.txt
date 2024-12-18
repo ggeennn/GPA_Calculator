@@ -69,4 +69,15 @@ excel 要求：
 2. 学科内的item也要分类，比如 test/quiz等，分类和modifier（比如比重和best 4 of 5等筛选条件）条件我会提供
 3. 计算出每门课当前GRADED TOTAL/EARNED(weight)/CURRENT(EARNED/GRADED)
 4. 计算出当前累计GPA，计算规则我会提供
-也说说你的建议，另外我有一个别人制作的模板，你可以参考
+输出策略：
+A：先单独制作工作表，再把数据填充指定位置
+B：直接生成 新excel表（权重分配等代码量可能较大）
+========
+1. 所有课程在同一张工作表
+2. save函数中需要加入逻辑：不同的学科匹配不同的item name关键字，填充到指定位置
+========
+明日计划：
+save_to_excel函数学习.gpt:	https://chatgpt.com/c/6763028c-4d70-8005-a1dd-e08bc6fda150
+细化关键词匹配与数据填充定位的逻辑
+========
+
