@@ -9,6 +9,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import logging
 import os
 import time
+from openpyxl import load_workbook
 
 # Functions: click_button, login_to_seneca, get_courses, get_course_grades
 def click_element(driver, by, identifier, wait, element_name="element"):
@@ -88,10 +89,53 @@ def get_course_grades(driver, course_name, wait):
         for idx, (name, grade) in enumerate(data, start=1):
             print(f"{idx}. Item: {name}, Grade: {grade}")
         print("\n\n")
+        save_to_excel(data, course_name)
+
         # Close the course view window
         click_element(driver, By.XPATH, '//*[@id="main-content"]/div[3]/div/div[3]/button', wait, "close")
     except Exception as e:
         logging.error(f"Failed to get grades for the course '{course_name}': {e}")
+
+def save_to_excel(data, course_name, template_path="SEMESTER 1 MARKINGS.xlsx", output_path="Updated_Markings.xlsx"):
+    # 学科对应的关键字与列位置
+    course_mapping = {
+        "COM111": {"columns": {"Test": "B", "Quiz": "C", "Assignment": "D"}},
+        "IPC": {"columns": {"Test": "E", "Quiz": "F", "Assignment": "G"}},
+        "OPS": {"columns": {"Test": "H", "Quiz": "I", "Assignment": "J"}},
+        "CPR": {"columns": {"Test": "K", "Quiz": "L", "Assignment": "M"}},
+        "APS": {"columns": {"Test": "N", "Quiz": "O", "Assignment": "P"}},
+    }
+    
+    try:
+        # 打开模板文件
+        workbook = load_workbook(template_path)
+        sheet = workbook["All Courses"]  # 假设所有数据填充到 "All Courses" 表
+
+        # 获取当前课程对应的列映射
+        course_config = course_mapping.get(course_name, {})
+        columns = course_config.get("columns", {})
+        
+        # 查找填充起始行（动态定位空行）
+        start_row = sheet.max_row + 1
+        
+        # 根据关键字分类填充数据
+        for item_name, grade in data:
+            column = None
+            for key, col in columns.items():
+                if key.lower() in item_name.lower():  # 匹配 item name 的关键字
+                    column = col
+                    break
+
+            if column:
+                sheet[f"A{start_row}"] = course_name  # A列存储课程名称
+                sheet[f"{column}{start_row}"] = grade  # 填充到对应列
+                start_row += 1
+
+        # 保存新文件
+        workbook.save(output_path)
+        logging.info(f"Grades for {course_name} saved to {output_path} successfully!")
+    except Exception as e:
+        logging.error(f"Failed to save data for {course_name} to Excel: {e}")
 
 def main():
     # Setup WebDriver
