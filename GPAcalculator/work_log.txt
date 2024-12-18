@@ -37,34 +37,6 @@ stale element error解决方法：重复给元素赋值！！！！
 提取策略
 使用 Selenium 的 find_elements_by_* 方法获取多个元素。 由于 Item Name 和 Grade 是成对出现的，我们可以先定位到包含这两类信息的父级元素，然后通过相对路径定位到具体的子元素。
 ================
-Gemini代码示例
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-import pandas as pd
-
-# 初始化 WebDriver
-driver = webdriver.Chrome()  # 替换为你的浏览器驱动
-driver.get("https://your_target_url")  # 替换为你的目标网址
-
-# 定位到包含 Item Name 和 Grade 的父级元素 (根据实际情况调整选择器)
-items = driver.find_elements(By.CSS_SELECTOR, ".row.js-rowchild-is-invokable")
-
-# 创建一个空列表，用于存储提取的数据
-data = []
-
-# 遍历每个 item 元素，提取 Item Name 和 Grade
-for item in items:
-    item_name = item.find_element(By.CSS_SELECTOR, ".item-name").text
-    grade = item.find_element(By.CSS_SELECTOR, ".grade").text
-    data.append([item_name, grade])
-
-# 创建 DataFrame 并保存到 Excel
-df = pd.DataFrame(data, columns=["Item Name", "Grade"])
-df.to_excel("grades.xlsx", index=False)
-
-# 关闭浏览器
-driver.quit()
-================
 注意事项
 选择器准确性： 确保 CSS 选择器或 XPath 表达式能够准确地定位到目标元素。如果网页结构发生变化，可能需要调整选择器。
 动态加载内容： 如果页面内容是动态加载的，可能需要等待元素加载完成再进行操作，可以使用 WebDriverWait 和 expected_conditions 来实现。
@@ -75,12 +47,12 @@ driver.quit()
 多页面处理： 如果需要提取多个页面的数据，可以结合分页机制，逐页提取数据。
 数据分析： 提取的数据可以进一步进行数据分析，例如计算平均分、最高分、最低分等。
 注意： 上述代码只是一个示例，具体的实现细节需要根据你所面对的网页结构和数据格式进行调整。
-
+================
 问题解答
 选择器如何写？ 可以提供更详细的 HTML 结构，我帮你分析并给出建议。
 遇到动态加载怎么办？ 可以介绍 Selenium 中的等待机制。
 数据清洗有什么技巧？ 可以提供一些常用的数据清洗方法
-====================
+=================
 代码优化v1.0
 
 2024/12/17------------------代码优化v1.1
@@ -89,3 +61,12 @@ final frame:
 	click_element	滚动至元素	#待优化	
 	main		进入 grades+滚动	#待优化
 为什么必须sleep才能正常进入grades分页/滚动？
+
+2024/12/18------------------数据输出
+现在准备把数据输出到excel
+excel 要求：
+1. 按学科分类
+2. 学科内的item也要分类，比如 test/quiz等，分类和modifier（比如比重和best 4 of 5等筛选条件）条件我会提供
+3. 计算出每门课当前GRADED TOTAL/EARNED(weight)/CURRENT(EARNED/GRADED)
+4. 计算出当前累计GPA，计算规则我会提供
+也说说你的建议，另外我有一个别人制作的模板，你可以参考
