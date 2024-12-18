@@ -63,6 +63,7 @@ def get_course_grades(driver, course_name, course_xpaths, wait):
             try:
                 # Try to click each XPath and if successful, break out
                 course_button = wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
+                # time.sleep(1)
                 driver.execute_script("arguments[0].scrollIntoView({block: 'start'});", course_button)
                 time.sleep(1)  # wait for smooth scroll
                 course_button.click()

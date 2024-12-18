@@ -14,6 +14,16 @@ import time
 def click_element(driver, by, identifier, wait, element_name="element"):
     try:
         element = wait.until(EC.element_to_be_clickable((by, identifier)))
+        if element:
+            # 获取元素的边界框
+            rect = driver.execute_script("return arguments[0].getBoundingClientRect();", element)
+            # 检查元素是否在视口内
+            if rect['top'] < 0 or rect['bottom'] > driver.execute_script("return window.innerHeight;"):
+                # 如果元素不在视口内，滚动到元素
+                time.sleep(1) # 也可以写在scroll命令后面？？？
+                driver.execute_script("arguments[0].scrollIntoView(true);", element)
+                # time.sleep(1)
+
         element.click()
         logging.info(f"Clicked {element_name} successfully!")
     except Exception as e:
@@ -34,14 +44,15 @@ def login_to_seneca(driver, wait, email, password):
     except Exception as e:
         logging.error(f"Login failed: {e}")
 
+r'''待优化
 def get_courses(driver, wait):
     try:
         course_elements = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//bb-base-grades-student')))
         courses = []
         for course in course_elements:
             try:
-                name = course.find_element(By.XPATH, './/h3').text.strip()
-                link = course.find_element(By.XPATH, './/a[contains(text(), "View all work")]').get_attribute("href") # not working
+                name = course.find_element(By.XPATH, './/h3//a[@class="bb-click-target"]').text.strip()
+                link = course.find_element(By.XPATH, './/span[@ng-hide="baseGradesStudent.showAllGrades"]').get_attribute("href") # not working
                 courses.append((name, link))
             except Exception as e:
                 logging.error(f"Failed to fetch course details: {e}")
@@ -50,9 +61,11 @@ def get_courses(driver, wait):
     except Exception as e:
         logging.error(f"Error fetching courses: {e}")
         return []
+'''
 
 def get_course_grades(driver, course_name, wait):
     try:
+        logging.info(f"Getting grades for course: {course_name}")
         # Get the parent item elements
         items = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//div[@ng-repeat="grade in courseGradesStudent.userGrades"]')))
         data = []
@@ -74,10 +87,10 @@ def get_course_grades(driver, course_name, wait):
                 logging.error(f"Error processing item: {e}")
 
         # Print the results
-        print("Grades Report:\n")
+        print(f"\n\n{course_name} Grades Report:")
         for idx, (name, grade) in enumerate(data, start=1):
             print(f"{idx}. Item: {name}, Grade: {grade}")
-
+        print("\n\n")
         # Close the course view window
         click_element(driver, By.XPATH, '//*[@id="main-content"]/div[3]/div/div[3]/button', wait, "close")
     except Exception as e:
@@ -88,7 +101,7 @@ def main():
     options = Options()
     options.add_argument("--start-maximized")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-    wait = WebDriverWait(driver, 15)
+    wait = WebDriverWait(driver, 20)
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
     try:
@@ -106,19 +119,39 @@ def main():
         login_to_seneca(driver, wait, email, password)
 
         # 进入grades分页面
-        time.sleep(3)
+        time.sleep(3) #只能写在点击命令前面？？？
         click_element(driver, By.XPATH, '//bb-base-navigation-button[8]//a', wait, "Grades")
-        main_container = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="main-content-inner"]')))
-        logging.info("Main container located successfully.")
-        driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", main_container)
+        
+        # Wait for content to load
+        try:
+            # time.sleep(1)
+            main_container = wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="main-content-inner"]')))
+            print("Main container located successfully.")
+            scroll_height = driver.execute_script("return arguments[0].scrollHeight;", main_container)
+            client_height = driver.execute_script("return arguments[0].clientHeight;", main_container)
+            print(f"Scroll Height: {scroll_height}, Client Height: {client_height}")
+            driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", main_container)
+            time.sleep(1) # 也可以写在scroll命令前面？？？
+        except Exception as e:
+            print(f"Failed to locate main container: {e}")
 
         # Fetch and process courses
-        courses = get_courses(driver, wait)
-        for course_name, course_link in courses:
+        # courses = get_courses(driver, wait) 待优化
+        courses = [
+        ('IPC', '(//*[@id="card__733205_1"]/div/div/div[2]/div[2]/div/a)[2]'),
+        ('OPS', '//*[@id="card__731947_1"]/div/div/div[2]/div[2]/div/a/span[1]'),
+        ('CPR', '(//*[@id="card__737264_1"]/div/div/div[2]/div[2]/div/a/span[1])[2]'),
+        ('APS', '(//*[@id="card__733550_1"]/div/div/div[2]/div[2]/div/a/span[1])[2]'),
+        ('COM111', '(//*[@id="card__732569_1"]/div/div/div[2]/div[2]/div/a/span[1])[2]')
+        ]
+        for course_name, course_xpath in courses:
             logging.info(f"Fetching grades for {course_name}...")
-            driver.get(course_link)
-            get_course_grades(driver, course_name, wait)
-    
+            try:
+                click_element(driver, By.XPATH, course_xpath, wait, course_name)
+                get_course_grades(driver, course_name, wait)
+            except Exception as e:
+                logging.error(f"Select {course_name} failed: {e}")
+            
     finally:
         driver.quit()
 
