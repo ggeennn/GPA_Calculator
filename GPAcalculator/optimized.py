@@ -73,14 +73,11 @@ def get_course_grades(driver, course_name, wait):
         # Iterate over each item and extract Item Name and Grade
         for item in items:
             try:
-                # Extract Item Name (including link)
-                item_name = item.find_element(By.XPATH, './/div[@class="name ellipsis student-grades__exception"]').text.strip()
+                # Extract Item Name
+                name_xpath= './/div[@class="name ellipsis student-grades__exception"]'
+                item_name = item.find_element(By.XPATH, name_xpath).text.strip()
                 # Extract Grade
-                 # Determine XPath for grades based on the course name (IPC or not)
-                if "IPC" in course_name:  # Check if the course is IPC
-                    grades_xpath = './/span[contains(@class, "grade-input-display") and contains(@class, "grade-ellipsis")]'
-                else:
-                    grades_xpath = './/span[@class="grade-input-display grade-ellipsis"]'
+                grades_xpath = './/div[@class="grade-color"]'
                 grade = item.find_element(By.XPATH, grades_xpath).text.strip()
                 data.append([item_name, grade])
             except Exception as e:
@@ -124,16 +121,16 @@ def main():
         
         # Wait for content to load
         try:
-            # time.sleep(1)
+            time.sleep(1)
             main_container = wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="main-content-inner"]')))
-            print("Main container located successfully.")
+            logging.info("Main container located successfully.")
             scroll_height = driver.execute_script("return arguments[0].scrollHeight;", main_container)
             client_height = driver.execute_script("return arguments[0].clientHeight;", main_container)
             print(f"Scroll Height: {scroll_height}, Client Height: {client_height}")
             driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", main_container)
-            time.sleep(1) # 也可以写在scroll命令前面？？？
+            # time.sleep(1) 也可以写在scroll命令前面？？？
         except Exception as e:
-            print(f"Failed to locate main container: {e}")
+            logging.error(f"Failed to locate main container: {e}")
 
         # Fetch and process courses
         # courses = get_courses(driver, wait) 待优化
