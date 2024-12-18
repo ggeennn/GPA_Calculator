@@ -10,3 +10,38 @@
 | D            | 1.0               | 50% to 54%       |
 | F            | 0.0               | 0% to 49%        |
 
+# IPC
+Workshops (best 5 of 6): 10%
+Project (3): 10% ( 
+	Milestone 1: 1%
+	Milestone 2: 1%
+	Milestone 3: 8% )
+Quizzes (best 5 of 6): 10%
+Midterm Test (1): 35%
+Final Test (1): 35%
+
+# OPS
+Labs (10)- 30%
+Quizzes (7)- 15%
+Midterm (1)-25%
+Final Exam (1)- 30%
+
+# CPR
+Activities (best 8 of 10): 40%
+Workshops (best 8 of 10): 30%
+ICT News Presentation (1): 5%
+Final Group Project (1): 25%
+
+# APS
+Workshops (best 8 of 10): 15%
+Presentation (1): 5%
+Tests (3): 70% (T1: 15%, T2: 20%, T3: 35%)
+Assignment (1): 10%
+
+# COM111 (weight 1:1)
+Summary 10%
+Academic argument 15%
+Transfer assignment(s) 30%
+Formative assessment 20%
+Final 25%
+
