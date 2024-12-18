@@ -78,6 +78,6 @@ B：直接生成 新excel表（权重分配等代码量可能较大）
 ========
 明日计划：
 save_to_excel函数学习.gpt:	https://chatgpt.com/c/6763028c-4d70-8005-a1dd-e08bc6fda150
-细化关键词匹配与数据填充定位的逻辑
+细化关键词匹配（check GPAformulaguide.txt)与数据填充定位的逻辑
 ========
 

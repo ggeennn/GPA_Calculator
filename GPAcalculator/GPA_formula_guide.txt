@@ -45,3 +45,99 @@ Transfer assignment(s) 30%
 Formative assessment 20%
 Final 25%
 
+==========================================
+IPC Grades Report:
+1. Item: Q2, Grade: 7 / 10
+2. Item: Q4, Grade: 10 / 10
+3. Item: Q6, Grade: 8 / 10
+4. Item: WS3-A, Grade: 1 / 1
+5. Item: WS3-B, Grade: 1 / 1
+6. Item: WS4-A, Grade: 1 / 1
+7. Item: WS4-B, Grade: 1 / 1
+8. Item: WS5-A, Grade: 1 / 1
+9. Item: WS5-B, Grade: 1 / 1
+10. Item: WS6, Grade: 2 / 2
+11. Item: Attendance, Grade: 100 / 100
+12. Item: MS1, Grade: 10 / 10
+13. Item: MS 2, Grade: 10 / 10
+14. Item: MS 3 - Program, Grade: 60 / 60
+15. Item: MS3 - Video, Grade: 20 / 20
+16. Item: Q1, Grade: 10 / 10
+17. Item: Q3, Grade: 6 / 10
+18. Item: Q5, Grade: 10 / 10
+19. Item: WS1, Grade: 2 / 2
+20. Item: WS2-A, Grade: 1 / 1
+21. Item: WS2-B, Grade: 1 / 1
+22. Item: Midterm Test, Grade: 43 / 50
+
+OPS Grades Report:
+1. Item: Lab #2, Grade: 3 / 3
+2. Item: Lab #3, Grade: 3 / 3
+3. Item: Lab #4, Grade: 3 / 3
+4. Item: Lab #5, Grade: 3 / 3
+5. Item: Lab #8_fall2024, Grade: 3 / 3
+6. Item: Quiz 4, Grade: 8 / 8
+7. Item: Quiz 2, Grade: 8 / 10
+8. Item: Lab#6-fall2024, Grade: 100 / 100
+9. Item: Lab#7_Fall2024, Grade: 5 / 5
+10. Item: Lab#9-SharedLibraries, Grade: 5 / 5
+11. Item: Lab#10, Grade: 5 / 5
+12. Item: Quiz #1, Grade: 4 / 10
+13. Item: Lab #1, Grade: 3 / 3
+14. Item: Quiz 3, Grade: 10 / 10
+15. Item: Quiz 5-Fall2024, Grade: 10 / 10
+16. Item: Quiz 6, Grade: 7.25 / 7.75
+17. Item: Quiz 7-fall2024, Grade: 8 / 10
+18. Item: Midterm-Fall2024, Grade: 54.75 / 61
+
+CPR Grades Report:
+1. Item: Activity 03, Grade: 96 / 100
+2. Item: Activity 04, Grade: 97 / 100
+3. Item: Activity 05, Grade: 98 / 100
+4. Item: Activity 06, Grade: 95 / 100
+5. Item: Activity 07, Grade: 95 / 100
+6. Item: Activity 08, Grade: 98 / 100
+7. Item: Activity 09, Grade: 95 / 100
+8. Item: Quiz 04, Grade: 80 / 100
+9. Item: Activity 01, Grade: 90 / 100
+10. Item: Activity 02, Grade: 96 / 100
+11. Item: Activity 10, Grade: 100 / 100
+12. Item: Quiz 01, Grade: 80 / 100
+13. Item: Quiz 02, Grade: 100 / 100
+14. Item: Quiz 03, Grade: 100 / 100
+15. Item: Quiz 05, Grade: 90 / 100
+16. Item: Quiz 06, Grade: 100 / 100
+17. Item: Quiz 07, Grade: 60 / 100
+18. Item: Quiz 08, Grade: 100 / 100
+19. Item: Quiz 09, Grade: 100 / 100
+20. Item: Quiz 10, Grade: 80 / 100
+21. Item: ICT News, Grade: 90 / 100
+
+APS Grades Report:
+1. Item: WS06, Grade: 9 / 10
+2. Item: WS07, Grade: 10 / 10
+3. Item: WS08, Grade: 10 / 10
+4. Item: WS09, Grade: 4 / 10
+5. Item: WS10, Grade: 10.6 / 10
+6. Item: PRES1, Grade: 3.8 / 5
+7. Item: PRES2, Grade: 0 / 5
+8. Item: PRES3, Grade: 0 / 5
+9. Item: Test 02, Grade: 14 / 20
+10. Item: Vretta Intromath, Grade: 9.7 / 10
+11. Item: WS01, Grade: 10.2 / 10
+12. Item: WS02, Grade: 10.6 / 10
+13. Item: WS03, Grade: 10 / 10
+14. Item: WS04, Grade: 10 / 10
+15. Item: WS05, Grade: 4.4 / 10
+16. Item: Test 01, Grade: 8.5 / 15
+17. Item: BestPresentation, Grade: 3.8 / 5
+
+COM111 Grades Report:
+1. Item: Transfer Assignment 2 (15%), Grade: 12.25 / 15
+2. Item: Week 2 assignment ( 5%), Grade: 4.75 / 5
+3. Item: Personal Reflective Essay (10 %), Grade: 8.5 / 10
+4. Item: Summary test (10%), Monday, October 7, Grade: 7 / 10
+5. Item: Persuasive Paragraph (15%), Grade: 13 / 15
+6. Item: Analyzing Costabel's (2023) Article, Grade: 4.65 / 5
+7. Item: Transfer Assignment 1 (15%), Grade: 14.65 / 15
+
