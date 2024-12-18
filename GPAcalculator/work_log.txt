@@ -85,6 +85,7 @@ driver.quit()
 
 2024/12/17------------------代码优化v1.1
 final frame:
-函数get courses 		选择器调试
-函数get grade 		待优化
-main进入 grades分页面 	待优化
+	get_courses 			#选择器待调试
+	click_element	滚动至元素	#待优化	
+	main		进入 grades+滚动	#待优化
+为什么必须sleep才能正常进入grades分页/滚动？
