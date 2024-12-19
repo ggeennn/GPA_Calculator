@@ -46,6 +46,11 @@ Formative assessment 20%
 Final 25%
 
 ==========================================
+以下是我收集到的各科数据，拿其中的ops科目举例，由于数据提取时是杂乱的，比如我需要先sort item name:Quiz 1-7按顺序填充到J63-69；Lab 1-10按顺序填充到O63-72； midterm E66;final E67
+要求：1. final这个item现在还没有数据，所以excel目标位置先留白，其他数据处理也是这个要求
+2.所有分数格式由3/5这种变成60%这样的分数形式
+3.每门学科item name都有区别，我们先一点点改mapping
+==========================================
 IPC Grades Report:
 1. Item: Q2, Grade: 7 / 10
 2. Item: Q4, Grade: 10 / 10

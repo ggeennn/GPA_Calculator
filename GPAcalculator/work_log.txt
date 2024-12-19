@@ -81,3 +81,6 @@ save_to_excel函数学习.gpt:	https://chatgpt.com/c/6763028c-4d70-8005-a1dd-e08
 细化关键词匹配（check GPAformulaguide.txt)与数据填充定位的逻辑
 ========
 
+2024/12/19------------------数据输出0/5
+测试完成test.py 按测试逻辑完成输出
+
