@@ -138,7 +138,7 @@ def save_to_excel(workbook, data, course_name):
 
 def main():
     template_path = "SEMESTER 1 MARKINGS.xlsx"
-    output_path = "Updated_Markings.xlsx"
+    output_path = "test2_Updated_Markings.xlsx"
     workbook = load_workbook(template_path)
 
     # OPS 数据
