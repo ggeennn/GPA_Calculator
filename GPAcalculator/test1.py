@@ -4,9 +4,10 @@ from openpyxl.utils import column_index_from_string
 from collections import defaultdict
 
 def normalize_name(name):
-    """清理并标准化名称为小写的字母和数字"""
-    name = name.lower().replace("_fall2024", "")
+    """仅清理动态填充元素的名称"""
+    name = name.lower().replace("_Fall2024", "").replace("-Fall2024", "")
     return ''.join(filter(str.isalnum, name))
+
 
 def get_top_left_cell(worksheet, row, column):
     """获取合并单元格的左上角单元格"""
@@ -22,6 +23,7 @@ def safe_write_cell(worksheet, row, column, value):
     try:
         cell = get_top_left_cell(worksheet, row, column)
         cell.value = value
+        logging.debug(f"Written value '{value}' at row {row}, column {column}")
     except ValueError as e:
         logging.error(f"Failed to write value '{value}' at row {row}, column {column}: {e}")
 
@@ -128,17 +130,28 @@ def save_to_excel(workbook, data, course_name):
                 if course_name == "IPC" and key == "MS":
                     if "program" in normalized_item:
                         row, column = 56, column_index_from_string("C")
+                        logging.debug(f"Matched 'MS3 - Program' for {item_name}, setting row {row}, column {column}")
                     elif "video" in normalized_item:
                         row, column = 56, column_index_from_string("D")
+                        logging.debug(f"Matched 'MS3 - Video' for {item_name}, setting row {row}, column {column}")
                     else:
                         row = rows.get("MS_row", 1) + item_number - 1
                         column = column_index_from_string(column_letter)
+                        logging.debug(f"Matched 'MS' for {item_name}, setting row {row}, column {column}")
+                elif course_name == "APS" and key == "Vretta":
+                    row, column = rows.get("Vretta_row", 1), column_index_from_string("C")
+                    logging.debug(f"Matched key 'Vretta' for {item_name}, setting row {row}, column {column}")
+                elif course_name == "APS" and key == "BestPresentation":
+                    row, column = rows.get("BestPresentation_row", 1), column_index_from_string("C")
+                    logging.debug(f"Matched key 'BestPresentation' for {item_name}, setting row {row}, column {column}")
                 elif item_number == 0:
                     row = rows.get(f"{key.lower()}_row", 1)
+                    logging.debug(f"Matched key '{key}' for {item_name}, setting row {row}")
                 else:
                     row_key = f"{key.lower()}_start_row"
                     start_row = rows.get(row_key, 1)
                     row = start_row + item_number - 1
+                    logging.debug(f"Matched key '{key}' for {item_name}, setting start row {start_row} and row {row}")
 
                 column = column_index_from_string(column_letter)
                 safe_write_cell(workbook["TOTAL"], row, column, grade)
@@ -171,6 +184,7 @@ def main():
         ("Quiz 6", 0.935), ("Quiz 7-fall2024", 0.8), ("Midterm-Fall2024", 0.8967)
     ]
     save_to_excel(workbook, ops_data, "OPS")
+
 
     # CPR 数据
     cpr_data = [
