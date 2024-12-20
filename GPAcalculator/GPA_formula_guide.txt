@@ -172,52 +172,9 @@ OPS Grades Report:（data中成绩format视为小数）
 16. Item: Quiz 6, Grade: 7.25 / 7.75
 17. Item: Quiz 7-fall2024, Grade: 8 / 10
 18. Item: Midterm-Fall2024, Grade: 54.75 / 61
-----------------------
 
-Traceback (most recent call last):
-  File "P:\Project\GPAcalculator\test.py", line 162, in <module>
-    main()
-  File "P:\Project\GPAcalculator\test.py", line 145, in main
-    save_to_excel(workbook, aps_data, "APS")
-  File "P:\Project\GPAcalculator\test.py", line 102, in save_to_excel
-    workbook["TOTAL"][f"{column}{row}"] = grade
-    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\site-packages\openpyxl\worksheet\worksheet.py", line 317, in __setitem__
-    self[key].value = value
-    ~~~~^^^^^
-  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\site-packages\openpyxl\worksheet\worksheet.py", line 311, in __getitem__
-    return self._get_cell(min_row, min_col)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\site-packages\openpyxl\worksheet\worksheet.py", line 257, in _get_cell
-    raise ValueError(f"Row numbers must be between 1 and 1048576. Row number supplied was {row}")
-ValueError: Row numbers must be between 1 and 1048576. Row number supplied was 0
------------------------
-Traceback (most recent call last):
-  File "P:\Project\GPAcalculator\test.py", line 163, in <module>
-    main()
-  File "P:\Project\GPAcalculator\test.py", line 146, in main
-    save_to_excel(workbook, aps_data, "APS")
-  File "P:\Project\GPAcalculator\test.py", line 103, in save_to_excel
-    workbook["TOTAL"][f"{column}{row}"] = grade
-    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\site-packages\openpyxl\worksheet\worksheet.py", line 317, in __setitem__
-    self[key].value = value
-    ^^^^^^^^^^^^^^^
-AttributeError: 'MergedCell' object attribute 'value' is read-only
---------------------------
-Traceback (most recent call last):
-  File "P:\Project\GPAcalculator\test.py", line 175, in <module>
-    main()
-  File "P:\Project\GPAcalculator\test.py", line 144, in main
-    save_to_excel(workbook, ops_data, "OPS")
-  File "P:\Project\GPAcalculator\test.py", line 110, in save_to_excel
-    cell = workbook["TOTAL"].cell(row=row, column=column)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\site-packages\openpyxl\worksheet\worksheet.py", line 241, in cell
-    if row < 1 or column < 1:
-                  ^^^^^^^^^^
-TypeError: '<' not supported between instances of 'str' and 'int'
 =====================================================================
+
     # OPS 数据
     ops_data = [
         ("Lab #2", 1.0), ("Lab #3", 1.0), ("Lab #4", 1.0), ("Lab #5", 1.0),
@@ -273,3 +230,85 @@ TypeError: '<' not supported between instances of 'str' and 'int'
         ("Midterm Test", 0.86)
     ]
     save_to_excel(workbook, ipc_data, "IPC")
+================================================================
+运行中以下课程填充出现问题，对照mapping debug：
+  "OPS": {
+            "columns": {
+                "Lab": "O",
+                "Quiz": "J",
+                "Midterm": "C",
+                "Final": "C"
+            },
+            "rows": {
+                "lab_start_row": 63,
+                "quiz_start_row": 63,
+                "midterm_row": 66,
+                "final_row": 67
+            }
+DEBUG:root:Processing item: Lab #8_fall2024, grade: 1.0		
+DEBUG:root:Matched key 'Lab' for Lab #8_fall2024, setting start row 63 and row 82086	#应该在row 70
+DEBUG:root:Processing item: Lab#6-fall2024, grade: 1.0
+DEBUG:root:Matched key 'Lab' for Lab#6-fall2024, setting start row 63 and row 62086	#suppose 68
+DEBUG:root:Processing item: Quiz 5-Fall2024, grade: 1.0
+DEBUG:root:Matched key 'Quiz' for Quiz 5-Fall2024, setting start row 63 and row 52086	#suppose 67
+DEBUG:root:Processing item: Midterm-Fall2024, grade: 0.8967
+DEBUG:root:Matched key 'Midterm' for Midterm-Fall2024, setting start row 1 and row 2024	#这是OPS的固定填充元素 位置C66
+--------
+APS": {
+            "columns": {
+                "test": "I",
+                "ws": "O",
+                "Vretta": "C",
+                "BestPresentation": "C"
+            },
+            "rows": {
+                "test_start_row": 14,
+                "ws_start_row": 14,
+                "Vretta_row": 20,
+                "BestPresentation_row": 19
+            }
+DEBUG:root:Processing item: Vretta Intromath, grade: 0.97
+DEBUG:root:Matched key 'Vretta' for Vretta Intromath, setting row 1	#应该在C20（实际为合并单元格C20+D20）
+DEBUG:root:Processing item: BestPresentation, grade: 0.76
+DEBUG:root:Matched key 'BestPresentation' for BestPresentation, setting row 1	#应该在C19
+--------
+  "COM111": {
+            "columns": {
+                "Summary": "C",
+                "Analyzing": "C",
+                "Personal": "D",
+                "Transfer": "C",
+                "week2": "C",
+                "Persuasive": "D",
+                "Final": "C"
+            },
+            "rows": {
+                "Summary_row": 41,
+                "Analyzing_row": 42,
+                "Personal_row": 42,
+                "Transfer_start_row": 43,
+                "week2_row": 45,
+                "Persuasive_row": 45,
+                "Final_row": 46
+            }实际
+DEBUG:root:Matched key 'Transfer' for Transfer Assignment 2, setting start row 1 and row 2	
+DEBUG:root:Written value '0.8166666666666667' at row 2, column 3	#suppose C44
+DEBUG:root:Processing item: Week 2 assignment, grade: 0.95
+DEBUG:root:Matched key 'week2' for Week 2 assignment, setting start row 1 and row 2	
+DEBUG:root:Written value '0.95' at row 2, column 3			#suppose C45 
+DEBUG:root:Processing item: Personal Reflective Essay, grade: 0.85
+DEBUG:root:Matched key 'Personal' for Personal Reflective Essay, setting row 1
+DEBUG:root:Written value '0.85' at row 1, column 4			#suppose D42 
+DEBUG:root:Processing item: Summary test, grade: 0.7
+DEBUG:root:Matched key 'Summary' for Summary test, setting row 1	
+DEBUG:root:Written value '0.7' at row 1, column 3			#suppose C41 
+DEBUG:root:Processing item: Persuasive Paragraph, grade: 0.8666666666666667
+DEBUG:root:Matched key 'Persuasive' for Persuasive Paragraph, setting row 1
+DEBUG:root:Written value '0.8666666666666667' at row 1, column 4	#suppose D45 
+DEBUG:root:Processing item: Analyzing Costabel's (2023) Article, grade: 0.93
+DEBUG:root:Matched key 'Analyzing' for Analyzing Costabel's (2023) Article, setting start row 1 and row 2023
+DEBUG:root:Written value '0.93' at row 2023, column 3			#suppose C42 
+DEBUG:root:Processing item: Transfer Assignment 1, grade: 0.9766666666666667
+DEBUG:root:Matched key 'Transfer' for Transfer Assignment 1, setting start row 1 and row 1
+DEBUG:root:Written value '0.9766666666666667' at row 1, column 3	#suppose C43把课程COM111的mapping全部改为固定填充，代码量会减少吗 
+

@@ -124,9 +124,10 @@ COM111 Grades Report:（data中成绩format视为小数）
 5. Item: Persuasive Paragraph (15%), Grade: 13 / 15
 6. Item: Analyzing Costabel's (2023) Article, Grade: 4.65 / 5
 7. Item: Transfer Assignment 1 (15%), Grade: 14.65 / 15
-=====================================
-APS的Vretta/BestPresentation；COM111的所有数据；OPS的midterm/quiz5/quiz7/lab7/lab7/lab8这些均没有填充，并且A1的题头被误填充了数字0.976666666666667。为什么会这样？观察未成功填充data的共有特性，难道是item name的匹配规则需要优化？现在是什么规则，需要改成什么匹配？
-=====
-normalize_name这里只列举了一种后缀“_fall2024”还有其他不同后缀，没有通用的标准化清洗规则吗，简单一点，只要是固定填充不normal可以吗，只要识别到当前item name包含了mapping关键词就匹配，只有需要动态填充的才需要把“_fall2024”或者-fall2024这种后缀删除，以便sort（OPS的lab和quiz）
-============================================
-todo： 观察test1及test2，判断保留哪个逻辑（test2 成功处理合并单元格，test失败，why）
+===========to do====================
+Test1 输出检查：
+APS		pass
+CPR		pass
+COM111		all fail!!
+IPC		ms3_video fail
+OPS		item name后缀失当
