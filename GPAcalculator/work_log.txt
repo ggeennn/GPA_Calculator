@@ -82,9 +82,5 @@ save_to_excel函数学习.gpt:	https://chatgpt.com/c/6763028c-4d70-8005-a1dd-e08
 
 2024/12/19------------------数据输出2/5: OPS/CPR
 测试完成test.py 按测试逻辑完成输出
-========
-明日计划：
-1 原始爬取代码直接添加grade格式转换，参考语句：
-    score, total = map(float, grade.split('/'))  # 分割并转换为浮点数
-    return score / total
-2 继续mapping完善
+原始爬取代码直接添加grade格式转换		#待测试
+填充逻辑优化
