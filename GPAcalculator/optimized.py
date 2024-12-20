@@ -79,7 +79,9 @@ def get_course_grades(driver, course_name, wait):
                 item_name = item.find_element(By.XPATH, name_xpath).text.strip()
                 # Extract Grade
                 grades_xpath = './/div[@class="grade-color"]'
-                grade = item.find_element(By.XPATH, grades_xpath).text.strip()
+                raw_grade = item.find_element(By.XPATH, grades_xpath).text.strip()
+                score, total = map(float, raw_grade.split('/'))
+                grade = score / total
                 data.append([item_name, grade])
             except Exception as e:
                 logging.error(f"Error processing item: {e}")
