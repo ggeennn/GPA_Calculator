@@ -80,7 +80,13 @@ B：直接生成 新excel表（权重分配等代码量可能较大）
 save_to_excel函数学习.gpt:	https://chatgpt.com/c/6763028c-4d70-8005-a1dd-e08bc6fda150
 细化关键词匹配（check GPAformulaguide.txt)与数据填充定位的逻辑
 
-2024/12/19------------------数据输出2/5: OPS/CPR
+2024/12/19------------------数据输出4/5: except com111
 测试完成test.py 按测试逻辑完成输出
-原始爬取代码直接添加grade格式转换		#待测试
-填充逻辑优化
+原始爬取代码直接添加grade格式转换		# 待测试 optimized.py
+填充逻辑优化 				# test.py
+========
+明日计划：
+观察生成的excel表只发现两处问题
+1.IPC的MS均没有成功填充（MS1/MS2/MS3-Video/MS3-Program）"MS": "C" "MS_row": 54   #动态起始行，但是注意！data的ms最后一个MS3分为program和 video，分别填充到C56和D56，你觉得是改为固定填充方便？继续尝试动态填充会不会太复杂？1/2动态3固定？
+2.OPS的item name只要包含了和mapping不相关的字母串，都没有成功填充，比如("Lab #8_fall2024", 1.0),("Lab#6-fall2024", 1.0), ("Quiz 5-Fall2024", 1.0), ("Midterm-Fall2024", 0.8967)...这种情况的唯独("Lab#9-SharedLibraries", 1.0)成功填充
+按照上述问题修改代码

@@ -46,54 +46,14 @@ Formative assessment 20%
 Final 25%
 
 ==========================================
-以下是我收集到的各科数据，拿其中的ops科目举例，由于数据提取时是杂乱的，比如我需要先sort item name:Quiz 1-7按顺序填充到J63-69；Lab 1-10按顺序填充到O63-72； midterm E66;final E67
-要求：1. final这个item现在还没有数据，所以excel目标位置先留白，其他数据处理也是这个要求
-2.所有分数格式由3/5这种变成60%这样的分数形式
-3.每门学科item name都有区别，我们先一点点改mapping
-==========================================
-IPC Grades Report:
-1. Item: Q2, Grade: 7 / 10
-2. Item: Q4, Grade: 10 / 10
-3. Item: Q6, Grade: 8 / 10
-4. Item: WS3-A, Grade: 1 / 1
-5. Item: WS3-B, Grade: 1 / 1
-6. Item: WS4-A, Grade: 1 / 1
-7. Item: WS4-B, Grade: 1 / 1
-8. Item: WS5-A, Grade: 1 / 1
-9. Item: WS5-B, Grade: 1 / 1
-10. Item: WS6, Grade: 2 / 2
-11. Item: Attendance, Grade: 100 / 100
-12. Item: MS1, Grade: 10 / 10
-13. Item: MS 2, Grade: 10 / 10
-14. Item: MS 3 - Program, Grade: 60 / 60
-15. Item: MS3 - Video, Grade: 20 / 20
-16. Item: Q1, Grade: 10 / 10
-17. Item: Q3, Grade: 6 / 10
-18. Item: Q5, Grade: 10 / 10
-19. Item: WS1, Grade: 2 / 2
-20. Item: WS2-A, Grade: 1 / 1
-21. Item: WS2-B, Grade: 1 / 1
-22. Item: Midterm Test, Grade: 43 / 50
-
-OPS Grades Report:
-1. Item: Lab #2, Grade: 3 / 3
-2. Item: Lab #3, Grade: 3 / 3
-3. Item: Lab #4, Grade: 3 / 3
-4. Item: Lab #5, Grade: 3 / 3
-5. Item: Lab #8_fall2024, Grade: 3 / 3
-6. Item: Quiz 4, Grade: 8 / 8
-7. Item: Quiz 2, Grade: 8 / 10
-8. Item: Lab#6-fall2024, Grade: 100 / 100
-9. Item: Lab#7_Fall2024, Grade: 5 / 5
-10. Item: Lab#9-SharedLibraries, Grade: 5 / 5
-11. Item: Lab#10, Grade: 5 / 5
-12. Item: Quiz #1, Grade: 4 / 10
-13. Item: Lab #1, Grade: 3 / 3
-14. Item: Quiz 3, Grade: 10 / 10
-15. Item: Quiz 5-Fall2024, Grade: 10 / 10
-16. Item: Quiz 6, Grade: 7.25 / 7.75
-17. Item: Quiz 7-fall2024, Grade: 8 / 10
-18. Item: Midterm-Fall2024, Grade: 54.75 / 61
+COM111 Grades Report:
+1. Item: Transfer Assignment 2 (15%), Grade: 12.25 / 15
+2. Item: Week 2 assignment ( 5%), Grade: 4.75 / 5
+3. Item: Personal Reflective Essay (10 %), Grade: 8.5 / 10
+4. Item: Summary test (10%), Monday, October 7, Grade: 7 / 10
+5. Item: Persuasive Paragraph (15%), Grade: 13 / 15
+6. Item: Analyzing Costabel's (2023) Article, Grade: 4.65 / 5
+7. Item: Transfer Assignment 1 (15%), Grade: 14.65 / 15
 
 CPR Grades Report:
 1. Item: Activity 03, Grade: 96 / 100
@@ -118,7 +78,22 @@ CPR Grades Report:
 20. Item: Quiz 10, Grade: 80 / 100
 21. Item: ICT News, Grade: 90 / 100
 
-APS Grades Report:
+==========================================
+添加课程APS mapping及data
+"APS": {
+            "columns": {
+                "test": "I",
+                "ws": "O",
+                "Vretta": "C",
+                "BestPresentation": "C"
+            },
+            "rows": {
+                "test_start_row": 14,   # 动态行号起始行
+                "ws_start_row": 14,  # 动态行号起始行
+                "Vretta_row": 20,     # 固定行号
+                "BestPresentation_row": 19     # 固定行号  
+	}
+APS Grades Report（data中成绩format视为小数）:
 1. Item: WS06, Grade: 9 / 10
 2. Item: WS07, Grade: 10 / 10
 3. Item: WS08, Grade: 10 / 10
@@ -136,13 +111,109 @@ APS Grades Report:
 15. Item: WS05, Grade: 4.4 / 10
 16. Item: Test 01, Grade: 8.5 / 15
 17. Item: BestPresentation, Grade: 3.8 / 5
+------------------------
+添加课程IPC mapping及data
+"IPC": {
+           "columns": {
+                "ws": "J",
+                "Q": "O",
+                "Midterm": "C",
+                "Final": "C",
+		"MS": "C"
+            },
+            "rows": {
+                "ws_start_row": 52,   # WS 动态行号起始行,但是注意！data的ws同一个数字如果有A,B两个版本，比如ws2-a和ws2-b,这需要添加判定：含有重复数字的item直接归一，值算为a和b的均值
+                "q_start_row": 52,  # Q 动态行号起始行
+                "midterm_row": 58,     # Midterm 固定行号
+                "final_row": 59 ,	 # 固定行号
+		"MS_row": 54   #动态起始行，但是注意！data的ms最后一个MS3分为program和 video，分别填充到C56和D56，这需要在数据清洗掉字母之前判定
+	}
+IPC Grades Report:（data中成绩format视为小数）
+1. Item: Q2, Grade: 7 / 10
+2. Item: Q4, Grade: 10 / 10
+3. Item: Q6, Grade: 8 / 10
+4. Item: WS3-A, Grade: 1 / 1
+5. Item: WS3-B, Grade: 1 / 1
+6. Item: WS4-A, Grade: 1 / 1
+7. Item: WS4-B, Grade: 1 / 1
+8. Item: WS5-A, Grade: 1 / 1
+9. Item: WS5-B, Grade: 1 / 1
+10. Item: WS6, Grade: 2 / 2
+11. Item: Attendance, Grade: 100 / 100
+12. Item: MS1, Grade: 10 / 10
+13. Item: MS 2, Grade: 10 / 10
+14. Item: MS 3 - Program, Grade: 60 / 60
+15. Item: MS3 - Video, Grade: 20 / 20
+16. Item: Q1, Grade: 10 / 10
+17. Item: Q3, Grade: 6 / 10
+18. Item: Q5, Grade: 10 / 10
+19. Item: WS1, Grade: 2 / 2
+20. Item: WS2-A, Grade: 1 / 1
+21. Item: WS2-B, Grade: 1 / 1
+22. Item: Midterm Test, Grade: 43 / 50
+----------------------
+把OPS的data更改成如下内容：
+OPS Grades Report:（data中成绩format视为小数）
+1. Item: Lab #2, Grade: 3 / 3
+2. Item: Lab #3, Grade: 3 / 3
+3. Item: Lab #4, Grade: 3 / 3
+4. Item: Lab #5, Grade: 3 / 3
+5. Item: Lab #8_fall2024, Grade: 3 / 3
+6. Item: Quiz 4, Grade: 8 / 8
+7. Item: Quiz 2, Grade: 8 / 10
+8. Item: Lab#6-fall2024, Grade: 100 / 100
+9. Item: Lab#7_Fall2024, Grade: 5 / 5
+10. Item: Lab#9-SharedLibraries, Grade: 5 / 5
+11. Item: Lab#10, Grade: 5 / 5
+12. Item: Quiz #1, Grade: 4 / 10
+13. Item: Lab #1, Grade: 3 / 3
+14. Item: Quiz 3, Grade: 10 / 10
+15. Item: Quiz 5-Fall2024, Grade: 10 / 10
+16. Item: Quiz 6, Grade: 7.25 / 7.75
+17. Item: Quiz 7-fall2024, Grade: 8 / 10
+18. Item: Midterm-Fall2024, Grade: 54.75 / 61
+----------------------
 
-COM111 Grades Report:
-1. Item: Transfer Assignment 2 (15%), Grade: 12.25 / 15
-2. Item: Week 2 assignment ( 5%), Grade: 4.75 / 5
-3. Item: Personal Reflective Essay (10 %), Grade: 8.5 / 10
-4. Item: Summary test (10%), Monday, October 7, Grade: 7 / 10
-5. Item: Persuasive Paragraph (15%), Grade: 13 / 15
-6. Item: Analyzing Costabel's (2023) Article, Grade: 4.65 / 5
-7. Item: Transfer Assignment 1 (15%), Grade: 14.65 / 15
-
+Traceback (most recent call last):
+  File "P:\Project\GPAcalculator\test.py", line 162, in <module>
+    main()
+  File "P:\Project\GPAcalculator\test.py", line 145, in main
+    save_to_excel(workbook, aps_data, "APS")
+  File "P:\Project\GPAcalculator\test.py", line 102, in save_to_excel
+    workbook["TOTAL"][f"{column}{row}"] = grade
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\site-packages\openpyxl\worksheet\worksheet.py", line 317, in __setitem__
+    self[key].value = value
+    ~~~~^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\site-packages\openpyxl\worksheet\worksheet.py", line 311, in __getitem__
+    return self._get_cell(min_row, min_col)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\site-packages\openpyxl\worksheet\worksheet.py", line 257, in _get_cell
+    raise ValueError(f"Row numbers must be between 1 and 1048576. Row number supplied was {row}")
+ValueError: Row numbers must be between 1 and 1048576. Row number supplied was 0
+-----------------------
+Traceback (most recent call last):
+  File "P:\Project\GPAcalculator\test.py", line 163, in <module>
+    main()
+  File "P:\Project\GPAcalculator\test.py", line 146, in main
+    save_to_excel(workbook, aps_data, "APS")
+  File "P:\Project\GPAcalculator\test.py", line 103, in save_to_excel
+    workbook["TOTAL"][f"{column}{row}"] = grade
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\site-packages\openpyxl\worksheet\worksheet.py", line 317, in __setitem__
+    self[key].value = value
+    ^^^^^^^^^^^^^^^
+AttributeError: 'MergedCell' object attribute 'value' is read-only
+--------------------------
+Traceback (most recent call last):
+  File "P:\Project\GPAcalculator\test.py", line 175, in <module>
+    main()
+  File "P:\Project\GPAcalculator\test.py", line 144, in main
+    save_to_excel(workbook, ops_data, "OPS")
+  File "P:\Project\GPAcalculator\test.py", line 110, in save_to_excel
+    cell = workbook["TOTAL"].cell(row=row, column=column)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python311\Lib\site-packages\openpyxl\worksheet\worksheet.py", line 241, in cell
+    if row < 1 or column < 1:
+                  ^^^^^^^^^^
+TypeError: '<' not supported between instances of 'str' and 'int'
