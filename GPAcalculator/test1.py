@@ -32,10 +32,10 @@ def save_to_excel(workbook, data, course_name):
     course_mapping = {
         "OPS": {
             "columns": {
-                "Lab": "O",
-                "Quiz": "J",
-                "Midterm": "C",
-                "Final": "C"
+                "lab": "O",
+                "quiz": "J",
+                "midterm": "C",
+                "final": "C"
             },
             "rows": {
                 "lab_start_row": 63,
@@ -46,10 +46,10 @@ def save_to_excel(workbook, data, course_name):
         },
         "CPR": {
             "columns": {
-                "Activity": "J",
-                "Quiz": "O",
-                "ICT": "D",
-                "Final": "D"
+                "activity": "J",
+                "quiz": "O",
+                "ict": "D",
+                "final": "D"
             },
             "rows": {
                 "activity_start_row": 27,
@@ -75,17 +75,17 @@ def save_to_excel(workbook, data, course_name):
         "IPC": {
             "columns": {
                 "ws": "J",
-                "Q": "O",
-                "Midterm": "C",
-                "Final": "C",
-                "MS": "C"
+                "q": "O",
+                "midterm": "C",
+                "final": "C",
+                "ms": "C"
             },
             "rows": {
                 "ws_start_row": 52,
                 "q_start_row": 52,
                 "midterm_row": 58,
                 "final_row": 59,
-                "MS_row": 54
+                "ms_row": 54
             }
         },
         "COM111": {
@@ -125,9 +125,10 @@ def save_to_excel(workbook, data, course_name):
             normalized_key = normalize_name(key)
             if normalized_key in normalized_item:
                 matched = True
-                item_number = int(''.join(filter(str.isdigit, item_name)) or '0')
-
-                if course_name == "IPC" and key == "MS":
+                item_number = 0
+                if f'{key}_start_row' in rows:
+                    item_number = int(''.join(filter(str.isdigit, item_name)) or '0')
+                if course_name == "IPC" and key == "ms":
                     if "program" in normalized_item:
                         row, column = 56, column_index_from_string("C")
                         logging.debug(f"Matched 'MS3 - Program' for {item_name}, setting row {row}, column {column}")
@@ -135,7 +136,7 @@ def save_to_excel(workbook, data, course_name):
                         row, column = 56, column_index_from_string("D")
                         logging.debug(f"Matched 'MS3 - Video' for {item_name}, setting row {row}, column {column}")
                     else:
-                        row = rows.get("MS_row", 1) + item_number - 1
+                        row = rows.get("ms_row", 1) + item_number - 1
                         column = column_index_from_string(column_letter)
                         logging.debug(f"Matched 'MS' for {item_name}, setting row {row}, column {column}")
                 elif course_name == "APS" and key == "Vretta":
@@ -145,10 +146,10 @@ def save_to_excel(workbook, data, course_name):
                     row, column = rows.get("BestPresentation_row", 1), column_index_from_string("C")
                     logging.debug(f"Matched key 'BestPresentation' for {item_name}, setting row {row}, column {column}")
                 elif item_number == 0:
-                    row = rows.get(f"{key.lower()}_row", 1)
+                    row = rows.get(f"{key}_row", 1)
                     logging.debug(f"Matched key '{key}' for {item_name}, setting row {row}")
                 else:
-                    row_key = f"{key.lower()}_start_row"
+                    row_key = f"{key}_start_row"
                     start_row = rows.get(row_key, 1)
                     row = start_row + item_number - 1
                     logging.debug(f"Matched key '{key}' for {item_name}, setting start row {start_row} and row {row}")
