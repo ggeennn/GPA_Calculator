@@ -131,3 +131,6 @@ CPR		pass
 COM111		all fail!!
 IPC		ms3_video fail
 OPS		item name后缀失当
+
+2024/12/23-----------------test1 debug...
+
