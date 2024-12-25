@@ -4,8 +4,11 @@ from openpyxl.utils import column_index_from_string
 from collections import defaultdict
 
 def normalize_name(name):
-    """清理并标准化名称为小写的字母和数字"""
-    return ''.join(filter(str.isalnum, name)).lower()
+    """仅清理动态填充元素的名称"""
+    name = name.lower()
+    name = name.replace("_fall2024", "").replace("-fall2024", "").replace("fall2024", "")
+    return ''.join(filter(str.isalnum, name))
+
 
 def get_top_left_cell(worksheet, row, column):
     """获取合并单元格的左上角单元格"""
@@ -21,6 +24,7 @@ def safe_write_cell(worksheet, row, column, value):
     try:
         cell = get_top_left_cell(worksheet, row, column)
         cell.value = value
+        logging.debug(f"Written value '{value}' at row {row}, column {column}")
     except ValueError as e:
         logging.error(f"Failed to write value '{value}' at row {row}, column {column}: {e}")
 
@@ -29,10 +33,10 @@ def save_to_excel(workbook, data, course_name):
     course_mapping = {
         "OPS": {
             "columns": {
-                "Lab": "O",
-                "Quiz": "J",
-                "Midterm": "C",
-                "Final": "C"
+                "lab": "O",
+                "quiz": "J",
+                "midterm": "C",
+                "final": "C"
             },
             "rows": {
                 "lab_start_row": 63,
@@ -43,10 +47,10 @@ def save_to_excel(workbook, data, course_name):
         },
         "CPR": {
             "columns": {
-                "Activity": "J",
-                "Quiz": "O",
-                "ICT": "D",
-                "Final": "D"
+                "activity": "J",
+                "quiz": "O",
+                "ict": "D",
+                "final": "D"
             },
             "rows": {
                 "activity_start_row": 27,
@@ -72,17 +76,37 @@ def save_to_excel(workbook, data, course_name):
         "IPC": {
             "columns": {
                 "ws": "J",
-                "Q": "O",
-                "Midterm": "C",
-                "Final": "C",
-                "MS": "C"
+                "q": "O",
+                "midterm": "C",
+                "final": "C",
+                "ms": "C"
             },
             "rows": {
                 "ws_start_row": 52,
                 "q_start_row": 52,
                 "midterm_row": 58,
                 "final_row": 59,
-                "MS_row": 54
+                "ms_start_row": 54
+            }
+        },
+        "COM111": {
+            "columns": {
+                "Summary": "C",
+                "Analyzing": "C",
+                "Personal": "D",
+                "Transfer": "C",
+                "week2": "C",
+                "Persuasive": "D",
+                "Final": "C"
+            },
+            "rows": {
+                "Summary_row": 41,
+                "Analyzing_row": 42,
+                "Personal_row": 42,
+                "Transfer_start_row": 43,
+                "week2_row": 45,
+                "Persuasive_row": 45,
+                "Final_row": 46
             }
         }
     }
@@ -97,29 +121,45 @@ def save_to_excel(workbook, data, course_name):
         logging.debug(f"Processing item: {item_name}, grade: {grade}")
         matched = False
         normalized_item = normalize_name(item_name)
+        logging.debug(f"normalnizing item: {normalized_item}")
+
 
         for key, column_letter in columns.items():
             normalized_key = normalize_name(key)
             if normalized_key in normalized_item:
                 matched = True
-                item_number = int(''.join(filter(str.isdigit, item_name)) or '0')
-                if item_number == 0:
-                    if key == "Final":
-                        row = rows.get("final_row", 1)
-                    elif key == "ICT":
-                        row = rows.get("ict_row", 1)
-                    elif key == "BestPresentation":
-                        row = rows.get("BestPresentation_row", 1)
-                    elif key == "Vretta":
-                        row = rows.get("Vretta_row", 1)
+                item_number = 0
+                if f'{key}_start_row' in rows:
+                    item_number = int(''.join(filter(str.isdigit, normalized_item)) or '0')
+                if course_name == "IPC" and key == "ms":
+                    if "program" in normalized_item:
+                        row, column = 56, column_index_from_string("C")
+                        logging.debug(f"Matched 'MS3 - Program' for {item_name}, setting row {row}, column {column}")
+                    elif "video" in normalized_item:
+                        row, column = 56, column_index_from_string("D")
+                        logging.debug(f"Matched 'MS3 - Video' for {item_name}, setting row {row}, column {column}")
                     else:
-                        row = rows.get(f"{key.lower()}_row", 1)  # 默认行号从 1 开始
+                        row = rows.get("ms_start_row", 1) + item_number - 1
+                        column = column_index_from_string(column_letter)
+                        logging.debug(f"Matched 'MS' for {item_name}, setting row {row}, column {column}")
+                elif course_name == "APS" and key == "Vretta":
+                    row, column = rows.get("Vretta_row", 1), column_index_from_string("C")
+                    logging.debug(f"Matched key 'Vretta' for {item_name}, setting row {row}, column {column}")
+                elif course_name == "APS" and key == "BestPresentation":
+                    row, column = rows.get("BestPresentation_row", 1), column_index_from_string("C")
+                    logging.debug(f"Matched key 'BestPresentation' for {item_name}, setting row {row}, column {column}")
+                elif item_number == 0:
+                    row = rows.get(f"{key}_row", 1)
+                    logging.debug(f"Matched key '{key}' for {item_name}, setting row {row}")
+                    column = column_index_from_string(column_letter)
                 else:
-                    row_key = f"{key.lower()}_start_row"
-                    start_row = rows.get(row_key, 1)  # 默认行号从 1 开始
+                    row_key = f"{key}_start_row"
+                    start_row = rows.get(row_key, 1)
                     row = start_row + item_number - 1
+                    logging.debug(f"Matched key '{key}' for {item_name}, setting start row {start_row} and row {row}")
+                    column = column_index_from_string(column_letter)
 
-                column = column_index_from_string(column_letter)  # 将列字母转换为数字
+                
                 safe_write_cell(workbook["TOTAL"], row, column, grade)
                 break
 
@@ -138,7 +178,7 @@ def save_to_excel(workbook, data, course_name):
 
 def main():
     template_path = "SEMESTER 1 MARKINGS.xlsx"
-    output_path = "test2_Updated_Markings.xlsx"
+    output_path = "test1_Updated_Markings.xlsx"
     workbook = load_workbook(template_path)
 
     # OPS 数据
@@ -150,6 +190,7 @@ def main():
         ("Quiz 6", 0.935), ("Quiz 7-fall2024", 0.8), ("Midterm-Fall2024", 0.8967)
     ]
     save_to_excel(workbook, ops_data, "OPS")
+
 
     # CPR 数据
     cpr_data = [
@@ -196,6 +237,18 @@ def main():
         ("Midterm Test", 0.86)
     ]
     save_to_excel(workbook, ipc_data, "IPC")
+
+    # COM111 数据
+    com111_data = [
+        ("Transfer Assignment 2", 12.25 / 15),
+        ("Week 2 assignment", 4.75 / 5),
+        ("Personal Reflective Essay", 8.5 / 10),
+        ("Summary test", 7 / 10),
+        ("Persuasive Paragraph", 13 / 15),
+        ("Analyzing Costabel's (2023) Article", 4.65 / 5),
+        ("Transfer Assignment 1", 14.65 / 15)
+    ]
+    save_to_excel(workbook, com111_data, "COM111")
 
     workbook.save(output_path)
     logging.info(f"All grades saved to {output_path} successfully!")
