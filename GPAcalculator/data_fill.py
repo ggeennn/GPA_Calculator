@@ -4,7 +4,6 @@ from openpyxl.utils import column_index_from_string
 from collections import defaultdict
 
 def normalize_name(name):
-    """仅清理动态填充元素的名称"""
     name = name.lower()
     name = name.replace("_fall2024", "").replace("-fall2024", "").replace("fall2024", "")
     return ''.join(filter(str.isalnum, name))
@@ -94,7 +93,8 @@ def save_to_excel(workbook, data, course_name):
                 "Summary": "C",
                 "Analyzing": "C",
                 "Personal": "D",
-                "Transfer": "C",
+                "Transfer Assignment 1": "C",
+                "Transfer Assignment 2": "C",
                 "week2": "C",
                 "Persuasive": "D",
                 "Final": "C"
@@ -103,7 +103,8 @@ def save_to_excel(workbook, data, course_name):
                 "Summary_row": 41,
                 "Analyzing_row": 42,
                 "Personal_row": 42,
-                "Transfer_start_row": 43,
+                "Transfer Assignment 1_row": 43,
+                "Transfer Assignment 2_row": 44,
                 "week2_row": 45,
                 "Persuasive_row": 45,
                 "Final_row": 46
@@ -142,12 +143,7 @@ def save_to_excel(workbook, data, course_name):
                         row = rows.get("ms_start_row", 1) + item_number - 1
                         column = column_index_from_string(column_letter)
                         logging.debug(f"Matched 'MS' for {item_name}, setting row {row}, column {column}")
-                elif course_name == "APS" and key == "Vretta":
-                    row, column = rows.get("Vretta_row", 1), column_index_from_string("C")
-                    logging.debug(f"Matched key 'Vretta' for {item_name}, setting row {row}, column {column}")
-                elif course_name == "APS" and key == "BestPresentation":
-                    row, column = rows.get("BestPresentation_row", 1), column_index_from_string("C")
-                    logging.debug(f"Matched key 'BestPresentation' for {item_name}, setting row {row}, column {column}")
+               
                 elif item_number == 0:
                     row = rows.get(f"{key}_row", 1)
                     logging.debug(f"Matched key '{key}' for {item_name}, setting row {row}")
