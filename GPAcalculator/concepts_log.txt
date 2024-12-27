@@ -261,4 +261,61 @@ JavaScript 动态内容：一些内容由JavaScript动态更新，可能在你�
 
 重新定位元素： 在操作前重新定位元素，确保获取到最新的元素引用。
 
+2024/12/26-------------------------
+**SSL Certificate Summary**
+
+1. **Certificate Basics:**
+   - SSL certificates ensure secure communication between your browser and a server.
+     **SSL证书用于确保浏览器与服务器之间的安全通信。**
+   - Certificates include validity dates, issuer information, and encryption keys.
+     **证书包含有效期、颁发者信息以及加密密钥。**
+   - SSL stands for "Secure Sockets Layer," a standard security protocol for encrypting data.
+     **SSL代表“安全套接层”，是一种用于加密数据的标准安全协议。**
+   - It creates an encrypted link between a web server and a browser to protect sensitive information (e.g., passwords, credit card details).
+     **它在网络服务器和浏览器之间创建加密链接，以保护敏感信息（如密码、信用卡信息）。**
+
+2. **Common Issues:**
+   - "Expired or not yet valid" errors occur if:
+     - The system date/time is incorrect.
+       **系统日期/时间不正确时会出现“已过期或尚未生效”错误。**
+     - The certificate is misconfigured or not updated by the server.
+       **证书配置错误或服务器未更新证书。**
+   - HSTS (HTTP Strict Transport Security) prevents accessing sites with invalid certificates.
+     **HSTS（HTTP严格传输安全）阻止访问使用无效证书的网站。**
+
+3. **Troubleshooting Steps:**
+   - **Check system time:** Ensure your local system date and time are correct.
+     **检查系统时间：确保本地系统日期和时间准确无误。**
+   - **Test different networks:** Switch to another network (e.g., mobile hotspot) to rule out network-specific issues.
+     **尝试不同的网络：切换到另一个网络（如移动热点）以排除网络特定问题。**
+   - **Wait for server fixes:** The issue may resolve if the server's IT team updates or corrects the certificate.
+     **等待服务器修复：如果服务器的IT团队更新或修正证书，问题可能会解决。**
+
+4. **Export and Trust Certificates (if necessary):**
+   - Export certificates by clicking "Export" in the browser's certificate viewer.
+     **通过浏览器证书查看器中的“导出”选项导出证书。**
+   - Add to trusted certificates:
+     - **Windows:** Install via "Trusted Root Certification Authorities."
+       **Windows：通过“受信任的根证书颁发机构”安装。**
+     - **Mac:** Import using "Keychain Access" and set to "Always Trust."
+       **Mac：使用“钥匙串访问”导入并设置为“始终信任”。**
+     - **Linux:** Add to `/usr/local/share/ca-certificates/` and run `sudo update-ca-certificates`.
+       **Linux：添加到`/usr/local/share/ca-certificates/`并运行`sudo update-ca-certificates`。**
+
+5. **Temporary Access for Development:**
+   - In Selenium, bypass SSL errors using arguments:
+     **在Selenium中，使用以下参数绕过SSL错误：**
+     ```python
+     options.add_argument('--ignore-certificate-errors')
+     options.add_argument('--ignore-ssl-errors')
+     ```
+   - Only for testing; not recommended for production environments.
+     **仅限测试使用；不推荐用于生产环境。**
+
+6. **What to Avoid:**
+   - Avoid installing certificates unless absolutely necessary and verified.
+     **除非绝对必要且经过验证，否则避免安装证书。**
+   - Don’t ignore SSL warnings permanently; these protect against potential security risks.
+     **不要永久忽略SSL警告；这些警告用于保护免受潜在的安全风险。**
+
 
