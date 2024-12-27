@@ -11,8 +11,71 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import os
 import time
+import json
+import os.path
 
-# Functions: click_button, login_to_seneca, get_courses, get_course_grades
+def setup_logging():
+    """配置日志系统"""
+    # 移除所有现有的处理器
+    logger = logging.getLogger()
+    for handler in logger.handlers[:]:
+        logger.removeHandler(handler)
+    
+    # 设置根日志记录器级别
+    logger.setLevel(logging.DEBUG)
+    
+    # 创建格式化器
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    
+    # 控制台处理器
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+    
+    # 文件处理器
+    file_handler = logging.FileHandler('gpa_calculator.log', mode='w', encoding='utf-8')
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+def setup_webdriver():
+    """配置并初始化 WebDriver"""
+    options = Options()
+    options.add_argument("--start-maximized")
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--ignore-ssl-errors')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()), 
+        options=options
+    )
+    return driver
+
+def get_credentials():
+    """获取登录凭证"""
+    email = os.getenv("SENECA_EMAIL")
+    password = os.getenv("SENECA_PASSWORD")
+    
+    if not email or not password:
+        raise ValueError("Missing SENECA_EMAIL or SENECA_PASSWORD environment variables")
+    
+    return email, password
+
+def load_json_config(filename):
+    config_path = os.path.join(os.path.dirname(__file__), filename)
+    try:
+        with open(config_path, 'r') as f:
+            config = json.load(f)
+            logging.info(f"Successfully loaded configuration from {filename}")
+            return config
+    except Exception as e:
+        logging.error(f"Failed to load configuration from {filename}: {e}")
+        return {}
+
 def click_element(driver, by, identifier, wait, element_name="element"):
     try:
         element = wait.until(EC.element_to_be_clickable((by, identifier)))
@@ -21,7 +84,7 @@ def click_element(driver, by, identifier, wait, element_name="element"):
             rect = driver.execute_script("return arguments[0].getBoundingClientRect();", element)
             # 检查元素是否在视口内
             if rect['top'] < 0 or rect['bottom'] > driver.execute_script("return window.innerHeight;"):
-                # 如果元素不在视口内，滚动到元素
+                # 如果元素不在视口内，滚动
                 time.sleep(1) # 也可以写在scroll命令后面？？？
                 driver.execute_script("arguments[0].scrollIntoView(true);", element)
                 # time.sleep(1)
@@ -69,10 +132,10 @@ def get_course_grades(driver, course_name, wait, workbook, output_path):
                 logging.error(f"Error processing item: {e}")
 
         # Print the results
-        print(f"\n\n{course_name} Grades Report:")
+        print(f"\n{course_name} Grades Report:")
         for idx, (name, grade) in enumerate(data, start=1):
             print(f"{idx}. Item: {name}, Grade: {grade}")
-        print("\n\n")
+        print("\n")
 
         save_to_excel(workbook, data, course_name)
 
@@ -108,90 +171,10 @@ def safe_write_cell(worksheet, row, column, value):
     except ValueError as e:
         logging.error(f"Failed to write value '{value}' at row {row}, column {column}: {e}")
 
+
 def save_to_excel(workbook, data, course_name):
-    """保存成绩到 Excel"""
-    course_mapping = {
-        "OPS": {
-            "columns": {
-                "lab": "O",
-                "quiz": "J",
-                "midterm": "C",
-                "final": "C"
-            },
-            "rows": {
-                "lab_start_row": 63,
-                "quiz_start_row": 63,
-                "midterm_row": 66,
-                "final_row": 67
-            }
-        },
-        "CPR": {
-            "columns": {
-                "activity": "J",
-                "quiz": "O",
-                "ict": "D",
-                "final": "D"
-            },
-            "rows": {
-                "activity_start_row": 27,
-                "quiz_start_row": 27,
-                "ict_row": 30,
-                "final_row": 31
-            }
-        },
-        "APS": {
-            "columns": {
-                "test": "I",
-                "ws": "O",
-                "Vretta": "C",
-                "BestPresentation": "C"
-            },
-            "rows": {
-                "test_start_row": 14,
-                "ws_start_row": 14,
-                "Vretta_row": 20,
-                "BestPresentation_row": 19
-            }
-        },
-        "IPC": {
-            "columns": {
-                "ws": "J",
-                "q": "O",
-                "midterm": "C",
-                "final": "C",
-                "ms": "C"
-            },
-            "rows": {
-                "ws_start_row": 52,
-                "q_start_row": 52,
-                "midterm_row": 58,
-                "final_row": 59,
-                "ms_start_row": 54
-            }
-        },
-        "COM111": {
-            "columns": {
-                "Summary": "C",
-                "Analyzing": "C",
-                "Personal": "D",
-                "Transfer Assignment 1": "C",
-                "Transfer Assignment 2": "C",                
-                "week2": "C",
-                "Persuasive": "D",
-                "Final": "C"
-            },
-            "rows": {
-                "Summary_row": 41,
-                "Analyzing_row": 42,
-                "Personal_row": 42,
-                "Transfer Assignment 1_row": 43,
-                "Transfer Assignment 2_row": 44,                
-                "week2_row": 45,
-                "Persuasive_row": 45,
-                "Final_row": 46
-            }
-        }
-    }
+    # Load course mapping from JSON file
+    course_mapping = load_json_config('semester1_mapping.json')
 
     course_config = course_mapping.get(course_name, {})
     columns = course_config.get("columns", {})
@@ -254,66 +237,79 @@ def save_to_excel(workbook, data, course_name):
             safe_write_cell(workbook["TOTAL"], row, column, average_grade)
 
 def main():
-    # Setup WebDriver
-    options = Options()
-    options.add_argument("--start-maximized")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-    wait = WebDriverWait(driver, 20)
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    template_path = "SEMESTER 1 MARKINGS.xlsx"
-    output_path = "Updated_Markings.xlsx"
-    workbook = load_workbook(template_path)
-
+    # 设置日志
+    setup_logging()
+    logging.info("Starting GPA calculator...")
+    
     try:
+        # 获取登录凭证
+        email, password = get_credentials()
+        
+        # 初始化 WebDriver
+        driver = setup_webdriver()
+        wait = WebDriverWait(driver, 20)
+        
+        template_path = "SEMESTER 1 MARKINGS.xlsx"
+        output_path = "Updated_Markings.xlsx"
+        
+        # 加载工作簿
+        try:
+            workbook = load_workbook(template_path)
+            logging.info(f"Successfully loaded template: {template_path}")
+        except Exception as e:
+            logging.error(f"Failed to load template: {e}")
+            raise
+        
+        # 启动浏览器并登录
         driver.get("https://learn.senecapolytechnic.ca/")
         logging.info("Browser launched successfully!")
-  
-        # Click "OK" button
-        click_element(driver, By.ID, "agree_button", wait, "OK")
-        # Click login button
-        click_element(driver, By.ID, "bottom_Submit", wait, "Login")
-
-        # Login
-        email = os.getenv("SENECA_EMAIL")
-        password = os.getenv("SENECA_PASSWORD")
-        login_to_seneca(driver, wait, email, password)
-
-        # 进入grades分页面
-        time.sleep(3) #只能写在点击命令前面？？？
-        click_element(driver, By.XPATH, '//bb-base-navigation-button[8]//a', wait, "Grades")
         
-        # Wait for content to load
+        # 点击初始按钮
+        click_element(driver, By.ID, "agree_button", wait, "OK")
+        click_element(driver, By.ID, "bottom_Submit", wait, "Login")
+        
+        # 登录
+        login_to_seneca(driver, wait, email, password)
+        
+        # 进入成绩页面
+        time.sleep(3)
+        click_element(driver, By.XPATH, '//a[@ui-sref="base.grades"]', wait, "Grades")
+        
+        # 等待内容加载
         try:
             time.sleep(1)
             main_container = wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="main-content-inner"]')))
             logging.info("Main container located successfully.")
             scroll_height = driver.execute_script("return arguments[0].scrollHeight;", main_container)
             client_height = driver.execute_script("return arguments[0].clientHeight;", main_container)
-            print(f"Scroll Height: {scroll_height}, Client Height: {client_height}")
+            logging.debug(f"Scroll Height: {scroll_height}, Client Height: {client_height}")
             driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", main_container)
-            # time.sleep(1) 也可以写在scroll命令前面？？？
         except Exception as e:
             logging.error(f"Failed to locate main container: {e}")
-
-        # Fetch and process courses
-        # courses = get_courses(driver, wait) 待优化
-        courses = [
-        ('IPC', '(//*[@id="card__733205_1"]/div/div/div[2]/div[2]/div/a)[2]'),
-        ('OPS', '//*[@id="card__731947_1"]/div/div/div[2]/div[2]/div/a/span[1]'),
-        ('CPR', '(//*[@id="card__737264_1"]/div/div/div[2]/div[2]/div/a/span[1])[2]'),
-        ('APS', '(//*[@id="card__733550_1"]/div/div/div[2]/div[2]/div/a/span[1])[2]'),
-        ('COM111', '(//*[@id="card__732569_1"]/div/div/div[2]/div[2]/div/a/span[1])[2]')
-        ]
-        for course_name, course_xpath in courses:
-            logging.info(f"Fetching grades for {course_name}...")
+            raise
+        
+        # 从配置文件加载课程信息
+        course_config = load_json_config('course_config.json')
+        if not course_config:
+            raise ValueError("Failed to load course configuration")
+        
+        # 处理每个课程
+        for course in course_config['courses']:
+            print(f"\n\n======================={course['name']}=======================")
+            logging.info(f"Processing course: {course['name']}")
             try:
-                click_element(driver, By.XPATH, course_xpath, wait, course_name)
-                get_course_grades(driver, course_name, wait, workbook, output_path)
+                click_element(driver, By.XPATH, course['xpath'], wait, course['name'])
+                get_course_grades(driver, course['name'], wait, workbook, output_path)
             except Exception as e:
-                logging.error(f"Select {course_name} failed: {e}")
-            
+                logging.error(f"Failed to process {course['name']}: {e}")
+                continue
+                
+    except Exception as e:
+        logging.error(f"An error occurred in main execution: {e}")
     finally:
         driver.quit()
+        print("\n")
+        logging.info("Browser closed. Program finished.")
 
 if __name__ == "__main__":
     main()
