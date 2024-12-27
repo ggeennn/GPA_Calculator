@@ -41,22 +41,28 @@
             "BestPresentation_row": 19
         }
     },
+    
     "IPC": {
         "columns": {
-            "ws": "J",
-            "q": "O",
-            "midterm": "C",
-            "final": "C",
-            "ms": "C"
+                "ws": "J",
+                "q": "O",
+                "midterm": "C",
+                "final": "C",
+                "ms": "C",
+                "ms_program": "C",
+                "ms_video": "D"
         },
         "rows": {
-            "ws_start_row": 52,
-            "q_start_row": 52,
-            "midterm_row": 58,
-            "final_row": 59,
-            "ms_start_row": 54
+                "ws_start_row": 52,
+                "q_start_row": 52,
+                "midterm_row": 58,
+                "final_row": 59,
+                "ms_start_row": 54,
+                "ms_program_row": 56,
+                "ms_video_row": 56
         }
     },
+    
     "COM111": {
         "columns": {
             "Summary": "C",
