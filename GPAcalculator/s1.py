@@ -180,45 +180,50 @@ def save_to_excel(workbook, data, course_name):
     columns = course_config.get("columns", {})
     rows = course_config.get("rows", {})
 
-    ws_averages = defaultdict(list)  # 处理 IPC 的 WS 平均分
+    ws_averages = defaultdict(list)  # Workshop 平均分
 
+    # 第一遍循环：收集所有WS的分数
     for item_name, grade in data:
         logging.debug(f"Processing item: {item_name}, grade: {grade}")
         matched = False
         normalized_item = normalize_name(item_name)
         logging.debug(f"normalnizing item: {normalized_item}")
 
+        # 处理WS
+        if course_name == "IPC" and "ws" in normalized_item :
+            try:
+                ws_number = int(''.join(filter(str.isdigit, normalized_item)))
+                ws_averages[ws_number].append(grade)
+                logging.debug(f"Added grade {grade} to Workshop {ws_number}")
+                continue
+            except ValueError:
+                logging.warning(f"Could not extract workshop number from {item_name}")
 
+        # 处理其他项目
         for key, column_letter in columns.items():
             normalized_key = normalize_name(key)
             if normalized_key in normalized_item:
                 matched = True
-                item_number = 0
-                if f'{key}_start_row' in rows:
-                    item_number = int(''.join(filter(str.isdigit, normalized_item)) or '0')
                 if course_name == "IPC" and key == "ms":
                     if "program" in normalized_item:
-                        row, column = 56, column_index_from_string("C")
+                        row = rows.get("ms_program_row", 56)  # 从配置文件获取，默认值为56
+                        column = column_index_from_string(columns.get("ms_program", "C"))  # 从配置文件获取，默认值为"C"
                         logging.debug(f"Matched 'MS3 - Program' for {item_name}, setting row {row}, column {column}")
                     elif "video" in normalized_item:
-                        row, column = 56, column_index_from_string("D")
+                        row = rows.get("ms_video_row", 56)  # 从配置文件获取，默认值为56
+                        column = column_index_from_string(columns.get("ms_video", "D"))  # 从配置文件获取，默认值为"D"
                         logging.debug(f"Matched 'MS3 - Video' for {item_name}, setting row {row}, column {column}")
                     else:
-                        row = rows.get("ms_start_row", 1) + item_number - 1
+                        row = rows.get("ms_start_row", 54) + int(''.join(filter(str.isdigit, normalized_item)) or '0') - 1
                         column = column_index_from_string(column_letter)
                         logging.debug(f"Matched 'MS' for {item_name}, setting row {row}, column {column}")
-               
-                elif item_number == 0:
-                    row = rows.get(f"{key}_row", 1)
-                    logging.debug(f"Matched key '{key}' for {item_name}, setting row {row}")
+                elif f'{key}_start_row' in rows:
+                    item_number = int(''.join(filter(str.isdigit, normalized_item)) or '0')
+                    row = rows.get(f"{key}_start_row") + (item_number - 1 if item_number > 0 else 0)
                     column = column_index_from_string(column_letter)
                 else:
-                    row_key = f"{key}_start_row"
-                    start_row = rows.get(row_key, 1)
-                    row = start_row + item_number - 1
-                    logging.debug(f"Matched key '{key}' for {item_name}, setting start row {start_row} and row {row}")
+                    row = rows.get(f"{key}_row", 1)
                     column = column_index_from_string(column_letter)
-
                 
                 safe_write_cell(workbook["TOTAL"], row, column, grade)
                 break
@@ -226,16 +231,17 @@ def save_to_excel(workbook, data, course_name):
         if not matched:
             logging.warning(f"No matching key found for item: {item_name}")
 
-    # 处理 IPC 的 WS 平均分
+    # 处理WS平均分
     if course_name == "IPC" and ws_averages:
-        row_key = "ws_start_row"
-        start_row = rows.get(row_key, 1)
+        ws_start_row = rows.get("ws_start_row", 52)
+        ws_column = column_index_from_string(columns.get("ws", "J"))
+        
         for ws_number, grades in ws_averages.items():
             average_grade = sum(grades) / len(grades)
-            row = start_row + ws_number - 1
-            column = column_index_from_string(columns.get("ws", "A"))
-            safe_write_cell(workbook["TOTAL"], row, column, average_grade)
-
+            row = ws_start_row + ws_number - 1
+            safe_write_cell(workbook["TOTAL"], row, ws_column, average_grade)
+            logging.info(f"Saved Workshop {ws_number} average grade: {average_grade} (from grades: {grades})")
+            
 def main():
     # 设置日志
     setup_logging()
