@@ -1,3 +1,7 @@
 *.exe
 
 ~*.xlsx
+
+*.log
+
+Updated_Markings.xlsx
