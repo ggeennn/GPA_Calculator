@@ -1,0 +1,82 @@
+{
+    "OPS": {
+        "columns": {
+            "lab": "O",
+            "quiz": "J",
+            "midterm": "C",
+            "final": "C"
+        },
+        "rows": {
+            "lab_start_row": 63,
+            "quiz_start_row": 63,
+            "midterm_row": 66,
+            "final_row": 67
+        }
+    },
+    "CPR": {
+        "columns": {
+            "activity": "J",
+            "quiz": "O",
+            "ict": "D",
+            "final": "D"
+        },
+        "rows": {
+            "activity_start_row": 27,
+            "quiz_start_row": 27,
+            "ict_row": 30,
+            "final_row": 31
+        }
+    },
+    "APS": {
+        "columns": {
+            "test": "I",
+            "ws": "O",
+            "Vretta": "C",
+            "BestPresentation": "C"
+        },
+        "rows": {
+            "test_start_row": 14,
+            "ws_start_row": 14,
+            "Vretta_row": 20,
+            "BestPresentation_row": 19
+        }
+    },
+    "IPC": {
+        "columns": {
+            "ws": "J",
+            "q": "O",
+            "midterm": "C",
+            "final": "C",
+            "ms": "C"
+        },
+        "rows": {
+            "ws_start_row": 52,
+            "q_start_row": 52,
+            "midterm_row": 58,
+            "final_row": 59,
+            "ms_start_row": 54
+        }
+    },
+    "COM111": {
+        "columns": {
+            "Summary": "C",
+            "Analyzing": "C",
+            "Personal": "D",
+            "Transfer Assignment 1": "C",
+            "Transfer Assignment 2": "C",
+            "week2": "C",
+            "Persuasive": "D",
+            "Final": "C"
+        },
+        "rows": {
+            "Summary_row": 41,
+            "Analyzing_row": 42,
+            "Personal_row": 42,
+            "Transfer Assignment 1_row": 43,
+            "Transfer Assignment 2_row": 44,
+            "week2_row": 45,
+            "Persuasive_row": 45,
+            "Final_row": 46
+        }
+    }
+}

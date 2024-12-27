@@ -1,0 +1,24 @@
+{
+    "courses": [
+        {
+            "name": "IPC",
+            "xpath": "(//*[@id=\"card__733205_1\"]/div/div/div[2]/div[2]/div/a)[2]"
+        },
+        {
+            "name": "OPS",
+            "xpath": "//*[@id=\"card__731947_1\"]/div/div/div[2]/div[2]/div/a/span[1]"
+        },
+        {
+            "name": "CPR",
+            "xpath": "(//*[@id=\"card__737264_1\"]/div/div/div[2]/div[2]/div/a/span[1])[2]"
+        },
+        {
+            "name": "APS",
+            "xpath": "(//*[@id=\"card__733550_1\"]/div/div/div[2]/div[2]/div/a/span[1])[2]"
+        },
+        {
+            "name": "COM111",
+            "xpath": "(//*[@id=\"card__732569_1\"]/div/div/div[2]/div[2]/div/a/span[1])[2]"
+        }
+    ]
+}
