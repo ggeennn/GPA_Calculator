@@ -15,32 +15,32 @@ import json
 import os.path
 
 def setup_logging():
-    """配置日志系统"""
-    # 移除所有现有的处理器
+    """Configure logging system"""
+    # Remove all existing handlers
     logger = logging.getLogger()
     for handler in logger.handlers[:]:
         logger.removeHandler(handler)
     
-    # 设置根日志记录器级别
+    # Set root logger level
     logger.setLevel(logging.DEBUG)
     
-    # 创建格式化器
+    # Create formatter
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     
-    # 控制台处理器
+    # Console handler
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.INFO)
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
     
-    # 文件处理器
+    # File handler
     file_handler = logging.FileHandler('gpa_calculator.log', mode='w', encoding='utf-8')
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
 def setup_webdriver():
-    """配置并初始化 WebDriver"""
+    """Configure and initialize WebDriver"""
     options = Options()
     options.add_argument("--start-maximized")
     options.add_argument('--ignore-certificate-errors')
@@ -56,7 +56,7 @@ def setup_webdriver():
     return driver
 
 def get_credentials():
-    """获取登录凭证"""
+    """Get login credentials"""
     email = os.getenv("SENECA_EMAIL")
     password = os.getenv("SENECA_PASSWORD")
     
@@ -80,12 +80,12 @@ def click_element(driver, by, identifier, wait, element_name="element"):
     try:
         element = wait.until(EC.element_to_be_clickable((by, identifier)))
         if element:
-            # 获取元素的边界框
+            # Get element boundary box
             rect = driver.execute_script("return arguments[0].getBoundingClientRect();", element)
-            # 检查元素是否在视口内
+            # Check if element is in view
             if rect['top'] < 0 or rect['bottom'] > driver.execute_script("return window.innerHeight;"):
-                # 如果元素不在视口内，滚动
-                time.sleep(1) # 也可以写在scroll命令后面？？？
+                # If element is not in view, scroll
+                time.sleep(1) # Can also be written after scroll command?
                 driver.execute_script("arguments[0].scrollIntoView(true);", element)
                 # time.sleep(1)
 
@@ -152,9 +152,8 @@ def normalize_name(name):
     name = name.replace("_fall2024", "").replace("-fall2024", "").replace("fall2024", "")
     return ''.join(filter(str.isalnum, name))
 
-
 def get_top_left_cell(worksheet, row, column):
-    """获取合并单元格的左上角单元格"""
+    """Get the top-left cell of a merged range"""
     cell = worksheet.cell(row=row, column=column)
     for merged_range in worksheet.merged_cells.ranges:
         if cell.coordinate in merged_range:
@@ -163,14 +162,13 @@ def get_top_left_cell(worksheet, row, column):
     return cell
 
 def safe_write_cell(worksheet, row, column, value):
-    """安全写入单元格，避免合并单元格写入问题"""
+    """Safely write to a cell, handling merged cells"""
     try:
         cell = get_top_left_cell(worksheet, row, column)
         cell.value = value
         logging.debug(f"Written value '{value}' at row {row}, column {column}")
     except ValueError as e:
         logging.error(f"Failed to write value '{value}' at row {row}, column {column}: {e}")
-
 
 def save_to_excel(workbook, data, course_name):
     # Load course mapping from JSON file
@@ -180,16 +178,16 @@ def save_to_excel(workbook, data, course_name):
     columns = course_config.get("columns", {})
     rows = course_config.get("rows", {})
 
-    ws_averages = defaultdict(list)  # Workshop 平均分
+    ws_averages = defaultdict(list)  # Workshop average
 
-    # 第一遍循环：收集所有WS的分数
+    # First loop: collect all WS scores
     for item_name, grade in data:
         logging.debug(f"Processing item: {item_name}, grade: {grade}")
         matched = False
         normalized_item = normalize_name(item_name)
         logging.debug(f"normalnizing item: {normalized_item}")
 
-        # 处理WS
+        # Process WS
         if course_name == "IPC" and "ws" in normalized_item :
             try:
                 ws_number = int(''.join(filter(str.isdigit, normalized_item)))
@@ -199,19 +197,19 @@ def save_to_excel(workbook, data, course_name):
             except ValueError:
                 logging.warning(f"Could not extract workshop number from {item_name}")
 
-        # 处理其他项目
+        # Process other projects
         for key, column_letter in columns.items():
             normalized_key = normalize_name(key)
             if normalized_key in normalized_item:
                 matched = True
                 if course_name == "IPC" and key == "ms":
                     if "program" in normalized_item:
-                        row = rows.get("ms_program_row", 56)  # 从配置文件获取，默认值为56
-                        column = column_index_from_string(columns.get("ms_program", "C"))  # 从配置文件获取，默认值为"C"
+                        row = rows.get("ms_program_row", 56)  # From configuration file, default value is 56
+                        column = column_index_from_string(columns.get("ms_program", "C"))  # From configuration file, default value is "C"
                         logging.debug(f"Matched 'MS3 - Program' for {item_name}, setting row {row}, column {column}")
                     elif "video" in normalized_item:
-                        row = rows.get("ms_video_row", 56)  # 从配置文件获取，默认值为56
-                        column = column_index_from_string(columns.get("ms_video", "D"))  # 从配置文件获取，默认值为"D"
+                        row = rows.get("ms_video_row", 56)  # From configuration file, default value is 56
+                        column = column_index_from_string(columns.get("ms_video", "D"))  # From configuration file, default value is "D"
                         logging.debug(f"Matched 'MS3 - Video' for {item_name}, setting row {row}, column {column}")
                     else:
                         row = rows.get("ms_start_row", 54) + int(''.join(filter(str.isdigit, normalized_item)) or '0') - 1
@@ -231,7 +229,7 @@ def save_to_excel(workbook, data, course_name):
         if not matched:
             logging.warning(f"No matching key found for item: {item_name}")
 
-    # 处理WS平均分
+    # Process WS averages
     if course_name == "IPC" and ws_averages:
         ws_start_row = rows.get("ws_start_row", 52)
         ws_column = column_index_from_string(columns.get("ws", "J"))
@@ -243,22 +241,22 @@ def save_to_excel(workbook, data, course_name):
             logging.info(f"Saved Workshop {ws_number} average grade: {average_grade} (from grades: {grades})")
             
 def main():
-    # 设置日志
+    # Setup logging
     setup_logging()
     logging.info("Starting GPA calculator...")
     
     try:
-        # 获取登录凭证
+        # Get login credentials
         email, password = get_credentials()
         
-        # 初始化 WebDriver
+        # Initialize WebDriver
         driver = setup_webdriver()
         wait = WebDriverWait(driver, 20)
         
         template_path = "SEMESTER 1 MARKINGS.xlsx"
         output_path = "Updated_Markings.xlsx"
         
-        # 加载工作簿
+        # Load workbook
         try:
             workbook = load_workbook(template_path)
             logging.info(f"Successfully loaded template: {template_path}")
@@ -266,22 +264,22 @@ def main():
             logging.error(f"Failed to load template: {e}")
             raise
         
-        # 启动浏览器并登录
+        # Launch browser and login
         driver.get("https://learn.senecapolytechnic.ca/")
         logging.info("Browser launched successfully!")
         
-        # 点击初始按钮
+        # Click initial buttons
         click_element(driver, By.ID, "agree_button", wait, "OK")
         click_element(driver, By.ID, "bottom_Submit", wait, "Login")
         
-        # 登录
+        # Login
         login_to_seneca(driver, wait, email, password)
         
-        # 进入成绩页面
+        # Navigate to grades page
         time.sleep(3)
         click_element(driver, By.XPATH, '//a[@ui-sref="base.grades"]', wait, "Grades")
         
-        # 等待内容加载
+        # Wait for content to load
         try:
             time.sleep(1)
             main_container = wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="main-content-inner"]')))
@@ -294,12 +292,12 @@ def main():
             logging.error(f"Failed to locate main container: {e}")
             raise
         
-        # 从配置文件加载课程信息
+        # Load course configuration from file
         course_config = load_json_config('course_config.json')
         if not course_config:
             raise ValueError("Failed to load course configuration")
         
-        # 处理每个课程
+        # Process each course
         for course in course_config['courses']:
             print(f"\n\n======================={course['name']}=======================")
             logging.info(f"Processing course: {course['name']}")
